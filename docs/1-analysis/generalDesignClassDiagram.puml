@@ -1,0 +1,66 @@
+@startuml
+    class Personnel {
+        id_personnel
+        nom
+        prenom
+        type_employe
+        email
+        telephone
+        diplomes
+        permis_bateau
+    }
+
+    class Client {
+        id_client
+        nom
+        prenom
+        email
+        telephone
+        piece_identite
+    }
+
+    class Materiel {
+        id_materiel
+        type_materiel
+        caracteristiques
+        etat
+        date_acquisition
+        numero_serie
+    }
+
+    class Forfait {
+        id_forfait
+        type_forfait
+        prix
+        date_achat
+        date_expiration
+        seances_restantes
+    }
+
+    class Cours {
+        id_cours
+        date_cours
+        heure_debut
+        niveau
+        nb_inscrits
+        statut
+        capacite_max
+    }
+
+    class Location {
+        id_location
+        date_debut
+        date_fin_prevue
+        date_retour
+        prix_base
+        supplements
+    }
+
+    Client "1" -- "0..*" Forfait: possède
+    Client "1" -- "0..*" Location: effectue
+    Personnel "1" -- "0..*" Cours: anime
+    Materiel "1" -- "0..*" Location: est loué dans
+    Forfait "1" -- "0..*" Cours: utilisé pour
+    Personnel "1" -- "0..*" Location: supervise
+
+@enduml
