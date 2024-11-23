@@ -1,0 +1,19 @@
+@startuml
+    [*] --> Recu: Acquisition
+    Recu --> Fonctionnel: Vérification OK
+    Fonctionnel --> EnPanne: Incident signalé
+    EnPanne --> Fonctionnel: Réparation
+    EnPanne --> MisAuRebut: Non réparable
+    Fonctionnel --> MisAuRebut: Usure excessive
+    MisAuRebut --> [*]
+
+    note right of Fonctionnel
+        Peut être loué ou
+        utilisé pour les cours
+    end note
+
+    note right of EnPanne
+        Non disponible pour
+        location/cours
+    end note
+@enduml
