@@ -11,33 +11,7 @@ participant "Forfait" as Forf
 participant "Camping" as Camp
 participant "Paiement" as Pay
 
-title Workflow général de l'application
-
-alt Création de compte par le Propriétaire
-    P -> App : Créer un compte
-    activate P
-else Création de compte par un Moniteur
-    M -> App : Créer un compte
-    activate M
-end
-
-App -> DB : Vérifier droits de création
-activate DB
-DB --> App : Droits de création confirmés
-deactivate DB
-
-App -> DB : Enregistrer nouveau compte
-activate DB
-DB --> App : Compte créé
-deactivate DB
-
-alt Création de compte par le Propriétaire
-    App --> P : Confirmation de création de compte
-    deactivate P
-else Création de compte par un Moniteur
-    App --> M : Confirmation de création de compte
-    deactivate M
-end
+title Inscription à un cours
 
 alt Inscription par le Moniteur
     M -> App : S'inscrire à un cours (niveau, forfait choisi)
