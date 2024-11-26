@@ -55,10 +55,14 @@ deactivate DB
 
 C -> App : Saisir les informations de paiement
 activate C
+activate App
 App -> Pay : Lancer le paiement (prix ajusté)
 activate Pay
 Pay --> App : Paiement validé
 deactivate Pay
+App --> C : Paiement validé
+deactivate C
+deactivate App
 
 App -> DB : Enregistrer inscription
 activate DB
