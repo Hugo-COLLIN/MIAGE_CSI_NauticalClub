@@ -1,43 +1,35 @@
 @startuml
-actor "Moniteur" as M
 actor "Propriétaire" as P
+actor "Moniteur" as M
 participant "SYSTEME" as App
-participant "Base de donnees" as DB
+participant "Base de données" as DB
+
+title Création de compte
 
 alt Création de compte Propriétaire
     P -> App : Créer un compte Propriétaire
     activate P
-
     App -> DB : Vérifier droits de création
     activate DB
     DB --> App : Droits de création confirmés
-    deactivate DB
-
     App -> DB : Enregistrer nouveau compte Propriétaire
-    activate DB
     DB --> App : Compte créé
     deactivate DB
-
     App --> P : Confirmation de création de compte
     deactivate P
-end
-
-alt Création de compte Moniteur
+else Création de compte Moniteur ou Garçon de plage
     alt Par le Propriétaire
-        P -> App : Créer un compte Moniteur
+        P -> App : Créer un compte (Moniteur ou Garçon de plage)
         activate P
     else Par un Moniteur
-        M -> App : Créer un compte Moniteur
+        M -> App : Créer un compte (Moniteur ou Garçon de plage)
         activate M
     end
 
     App -> DB : Vérifier droits de création
     activate DB
     DB --> App : Droits de création confirmés
-    deactivate DB
-
-    App -> DB : Enregistrer nouveau compte Moniteur
-    activate DB
+    App -> DB : Enregistrer nouveau compte
     DB --> App : Compte créé
     deactivate DB
 
@@ -49,33 +41,4 @@ alt Création de compte Moniteur
         deactivate M
     end
 end
-
-alt Création de compte Garçon de plage
-    alt Par le Propriétaire
-        P -> App : Créer un compte Garçon de plage
-        activate P
-    else Par un Moniteur
-        M -> App : Créer un compte Garçon de plage
-        activate M
-    end
-
-    App -> DB : Vérifier droits de création
-    activate DB
-    DB --> App : Droits de création confirmés
-    deactivate DB
-
-    App -> DB : Enregistrer nouveau compte Garçon de plage
-    activate DB
-    DB --> App : Compte créé
-    deactivate DB
-
-    alt Par le Propriétaire
-        App --> P : Confirmation de création de compte
-        deactivate P
-    else Par un Moniteur
-        App --> M : Confirmation de création de compte
-        deactivate M
-    end
-end
-
 @enduml
