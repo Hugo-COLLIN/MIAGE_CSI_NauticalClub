@@ -82,8 +82,13 @@ else Inscription par le Propriétaire
 end
 
 App -> G : Demander préparation du matériel
+activate G
 G -> Mat : Préparer le matériel
+activate Mat
 Mat --> G : Préparation terminée
+deactivate Mat
+G --> App : Matériel prêt
+deactivate G
 
 App -> P : Envoyer rapport de l'inscription
 activate P
