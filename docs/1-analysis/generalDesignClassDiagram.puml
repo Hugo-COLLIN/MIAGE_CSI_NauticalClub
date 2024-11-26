@@ -10,6 +10,27 @@
         permis_bateau
     }
 
+    class GarçonDePlage extends Personnel {
+        id_garcon
+        type_employe
+        diplomes
+        permis_bateau
+    }
+
+    class Moniteur extends Personnel {
+        id_moniteur
+        type_employe
+        diplomes
+        permis_bateau
+    }
+
+    class Proprietaire extends Personnel {
+        id_proprietaire
+        type_employe
+        diplomes
+        permis_bateau
+    }
+
     class Client {
         id_client
         nom
