@@ -138,6 +138,13 @@
         quantite
     }
 
+    class Paiement {
+        id_paiement
+        date_paiement
+        montant
+        type_paiement
+    }
+
     Client "1" -- "0..*" Forfait: possède
     Client "1" -- "0..*" Location: effectue
     Personnel "1" -- "0..*" Cours: anime
@@ -155,5 +162,6 @@
     HistPartenaire "1" -- "1..*" HistForfait: vend
     Camping "1" -- "1..*" Client: accueille
     Materiel "1" - "1" Cours: est utilisé pour
+    Paiement "1" -- "1..*" Forfait: payé pour
 
 @enduml
