@@ -6,29 +6,17 @@
         type_employe
         email
         telephone
-        diplomes
+        diplome
         permis_bateau
     }
 
     class GarçonDePlage extends Personnel {
-        id_garcon
-        type_employe
-        diplomes
-        permis_bateau
     }
 
     class Moniteur extends Personnel {
-        id_moniteur
-        type_employe
-        diplomes
-        permis_bateau
     }
 
     class Proprietaire extends Personnel {
-        id_proprietaire
-        type_employe
-        diplomes
-        permis_bateau
     }
 
     class Client {
@@ -56,11 +44,19 @@
         date_achat
         date_expiration
         seances_restantes
-        verifCamping()
     }
 
     class Partenaire {
         id_partenaire
+        nom
+        adresse
+        email
+        telephone
+        type_partenaire
+    }
+
+    class HistPartenaire {
+        id_hist_partenaire
         nom
         adresse
         email
@@ -156,6 +152,8 @@
     Personnel "1" - "0..*" HistCours : anime
     HistForfait "1" -- "0..*" Client: possède
     Partenaire "1" -- "1..*" Forfait: vend
+    HistPartenaire "1" -- "1..*" HistForfait: vend
     Camping "1" -- "1..*" Client: accueille
+    Materiel "1" - "1" Cours: est utilisé pour
 
 @enduml
