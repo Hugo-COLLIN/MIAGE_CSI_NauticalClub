@@ -4,6 +4,24 @@ actor "Propriétaire" as P
 participant "SYSTEME" as App
 participant "Base de donnees" as DB
 
+alt Création de compte Propriétaire
+    P -> App : Créer un compte Propriétaire
+    activate P
+
+    App -> DB : Vérifier droits de création
+    activate DB
+    DB --> App : Droits de création confirmés
+    deactivate DB
+
+    App -> DB : Enregistrer nouveau compte Propriétaire
+    activate DB
+    DB --> App : Compte créé
+    deactivate DB
+
+    App --> P : Confirmation de création de compte
+    deactivate P
+end
+
 alt Création de compte Moniteur
     alt Par le Propriétaire
         P -> App : Créer un compte Moniteur
