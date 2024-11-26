@@ -1,6 +1,7 @@
 @startuml
 actor "Propriétaire" as P
 actor "Moniteur" as M
+actor "Garçon de plage" as G
 participant "SYSTEME" as App
 participant "Base de données" as DB
 
@@ -9,6 +10,7 @@ title Création de compte
 alt Création de compte Propriétaire
     P -> App : Créer un compte Propriétaire
     activate P
+    activate App
     App -> DB : Vérifier droits de création
     activate DB
     DB --> App : Droits de création confirmés
@@ -16,13 +18,15 @@ alt Création de compte Propriétaire
     DB --> App : Compte créé
     deactivate DB
     App --> P : Confirmation de création de compte
+    deactivate App
     deactivate P
-else Création de compte Moniteur ou Garçon de plage
+else Création de compte Moniteur
     alt Par le Propriétaire
-        P -> App : Créer un compte (Moniteur ou Garçon de plage)
+        P -> App : Créer un compte Moniteur
         activate P
+        activate App
     else Par un Moniteur
-        M -> App : Créer un compte (Moniteur ou Garçon de plage)
+        M -> App : Créer un compte Moniteur
         activate M
     end
 
@@ -39,6 +43,38 @@ else Création de compte Moniteur ou Garçon de plage
     else Par un Moniteur
         App --> M : Confirmation de création de compte
         deactivate M
+        deactivate App
+    end
+else Création de compte Garçon de plage
+    alt Par le Propriétaire
+        P -> App : Créer un compte Garçon de plage
+        activate P
+        activate App
+    else Par un Moniteur
+        M -> App : Créer un compte Garçon de plage
+        activate M
+    else Par un Garçon de plage
+        G -> App : Créer un compte Garçon de plage
+        activate G
+    end
+
+    App -> DB : Vérifier droits de création
+    activate DB
+    DB --> App : Droits de création confirmés
+    App -> DB : Enregistrer nouveau compte
+    DB --> App : Compte créé
+    deactivate DB
+
+    alt Par le Propriétaire
+        App --> P : Confirmation de création de compte
+        deactivate P
+    else Par un Moniteur
+        App --> M : Confirmation de création de compte
+        deactivate M
+    else Par un Garçon de plage
+        App --> G : Confirmation de création de compte
+        deactivate G
+        deactivate App
     end
 end
 @enduml
