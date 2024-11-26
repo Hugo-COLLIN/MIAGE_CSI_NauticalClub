@@ -9,49 +9,66 @@ participant "Matériel" as Mat
 participant "Cours" as Cour
 participant "Forfait" as Forf
 participant "Camping" as Camp
+participant "Paiement" as Pay
 
 G -> App : S'inscrire à un cours (niveau, forfait choisi)
 activate G
-App --> G : Envoyer confirmation d'inscription (détails cours, remise, reçu)
-deactivate G
-App -> DB : Récupérer la liste des cours disponibles
 activate App
+
+App -> DB : Récupérer liste des cours disponibles
+activate DB
 DB --> App : Liste des cours disponibles
-deactivate App
+deactivate DB
 
 M -> App : Sélectionner un cours (date, horaire)
 App -> DB : Vérifier disponibilité du moniteur et du matériel
+activate DB
 DB -> Mat : Vérifier statut du matériel
+activate Mat
 Mat --> DB : Matériel disponible
-DB --> App : Disponibilité confirmée
+deactivate Mat
 
 M -> App : Indiquer affiliation à un camping partenaire
-App -> DB : Vérifier le camping dans la liste des partenaires
 DB -> Camp : Vérifier affiliation
+activate Camp
 Camp --> DB : Remise confirmée (10%)
-DB --> App : Appliquer remise
-C -> App  : Saisir les informations de paiement
+deactivate Camp
 
+DB --> App : Disponibilité et remise confirmées
+deactivate DB
+
+C -> App : Saisir les informations de paiement
+activate C
 App -> Pay : Lancer le paiement (prix ajusté)
+activate Pay
 Pay --> App : Paiement validé
-App --> C : Détails de paiement
+deactivate Pay
 
-M -> App : Confirmer l'inscription
-App -> DB : Enregistrer inscription (client, cours, moniteur, forfait, remise)
-DB --> App : Inscription enregistrée
-
-App -> DB : Mettre à jour le stock de matériel (réserver)
+App -> DB : Enregistrer inscription
+activate DB
 DB -> Mat : Réserver matériel pour le cours
+activate Mat
 Mat --> DB : Réservation confirmée
+deactivate Mat
+DB --> App : Inscription enregistrée
+deactivate DB
 
-App -> M : Notifier le moniteur (détails du cours, client)
+App -> M : Notifier le moniteur (détails du cours)
+activate M
 M --> App : Confirmation réception
+deactivate M
 
 App -> G : Demander préparation du matériel
-G -> Mat : Préparer le matériel pour le client
+G -> Mat : Préparer le matériel
 Mat --> G : Préparation terminée
-G --> App : Confirmation de préparation
 
-App -> P : Envoyer rapport de l'inscription (client, cours, paiement)
+App -> P : Envoyer rapport de l'inscription
+activate P
 P --> App : Accusé de réception
+deactivate P
+
+App --> G : Envoyer confirmation d'inscription (détails cours, remise, reçu)
+deactivate G
+deactivate App
+deactivate C
 @enduml
