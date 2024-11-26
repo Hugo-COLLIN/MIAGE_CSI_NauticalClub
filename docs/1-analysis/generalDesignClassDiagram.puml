@@ -35,6 +35,24 @@
         date_achat
         date_expiration
         seances_restantes
+        verifCamping()
+    }
+
+    class Partenaire {
+        id_partenaire
+        nom
+        adresse
+        email
+        telephone
+        type_partenaire
+    }
+
+    class Camping {
+        id_camping
+        nom
+        adresse
+        email
+        telephone
     }
 
     class HistForfait {
@@ -116,7 +134,7 @@
     HistCours "1" - "0..*" HistForfait: utilisé pour
     Personnel "1" - "0..*" HistCours : anime
     HistForfait "1" -- "0..*" Client: possède
-
-
+    Partenaire "1" -- "1..*" Forfait: vend
+    Camping "1" -- "1..*" Client: accueille
 
 @enduml
