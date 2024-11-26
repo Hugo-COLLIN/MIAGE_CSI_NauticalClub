@@ -3,7 +3,6 @@
         id_personnel
         nom
         prenom
-        type_employe
         email
         telephone
         diplome
