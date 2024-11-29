@@ -18,6 +18,12 @@
     class Proprietaire extends Personnel {
     }
 
+    class Saison {
+        id_saison
+        date_debut
+        date_fin
+    }
+
     class Client {
         id_client
         nom
@@ -162,5 +168,11 @@
     Camping "1" -- "1..*" Client: accueille
     Materiel "1" - "1" Cours: est utilisé pour
     Paiement "1" -- "1..*" Forfait: payé pour
+    Saison "1..*" -- "2..*" Personnel: embauche
+    Saison "1" -- "0..*" Cours: a lieu pendant
+    Saison "1" -- "0..*" Location: a lieu pendant
+    Saison "1" -- "0..*" Panne: a lieu pendant
+    Saison "1" -- "0..*" HistCours: a lieu pendant
+    Saison "1" -- "0..*" HistLocation: a lieu pendant
 
 @enduml
