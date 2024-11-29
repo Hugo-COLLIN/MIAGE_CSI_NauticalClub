@@ -25,6 +25,29 @@ App --> A : Confirmation de création de compte
 deactivate App
 deactivate A
 
+alt Se connecter comme "Moniteur"
+    M -> App : Se connecter
+    activate M
+    activate App
+else Se connecter comme "Propriétaire"
+    P -> App : Se connecter
+    activate P
+end
+
+App -> DB : Vérifier les informations de connexion
+    activate DB
+    DB --> App : Connexion réussie
+    deactivate DB
+
+alt Se connecter comme "Moniteur"
+    App --> M : Connexion réussie
+    deactivate M
+else Se connecter comme "Propriétaire"
+    App --> P : Connexion réussie
+    deactivate P
+    deactivate App
+end
+
 alt Inscription par le Moniteur
     M -> App : S'inscrire à un cours (niveau, forfait choisi)
     activate M
