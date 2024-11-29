@@ -1,6 +1,5 @@
 @startuml
 actor Client as C
-actor "Garçon de plage" as G
 actor "Moniteur" as M
 actor "Propriétaire" as P
 actor "Gestionnaire du système" as A
