@@ -28,6 +28,7 @@ deactivate A
 alt Inscription par le Moniteur
     M -> App : S'inscrire à un cours (niveau, forfait choisi)
     activate M
+    activate App
 else Inscription par le Propriétaire
     P -> App : S'inscrire à un cours (niveau, forfait choisi)
     activate P
@@ -99,15 +100,6 @@ else Inscription par le Propriétaire
     deactivate P
 end
 
-App -> G : Demander préparation du matériel
-activate G
-G -> Mat : Préparer le matériel
-activate Mat
-Mat --> G : Préparation terminée
-deactivate Mat
-G --> App : Matériel prêt
-deactivate G
-
 App -> P : Envoyer rapport de l'inscription
 activate P
 P --> App : Accusé de réception
@@ -115,12 +107,10 @@ deactivate P
 
 alt Inscription par le Moniteur
     App --> M : Envoyer confirmation d'inscription (détails cours, remise, reçu)
+    deactivate M
 else Inscription par le Propriétaire
     App --> P : Envoyer confirmation d'inscription (détails cours, remise, reçu)
+    deactivate App
+    deactivate P
 end
-
-deactivate G
-deactivate App
-deactivate C
-
 @enduml
