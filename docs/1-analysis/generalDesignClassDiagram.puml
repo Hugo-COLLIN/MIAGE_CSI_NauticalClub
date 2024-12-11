@@ -121,6 +121,15 @@
         supplements
     }
 
+    class HistLocation {
+        id_hist_location
+        date_debut
+        date_fin_prevue
+        date_retour
+        prix_base
+        supplements
+    }
+
     class Panne {
         id_panne
         date_panne
@@ -178,12 +187,11 @@
     Saison "1" -- "0..*" Cours: a lieu pendant
     Saison "1" -- "0..*" Location: a lieu pendant
     Saison "1" -- "0..*" Panne: a lieu pendant
-    Saison "1" -- "0..*" HistCours: a lieu pendant
     Saison "1" -- "0..*" HistLocation: a lieu pendant
     HistSaison "1..*" -- "2..*" Personnel: embauche
     HistSaison "1" -- "0..*" Cours: a lieu pendant
     HistSaison "1" -- "0..*" Location: a lieu pendant
-    HistSaison "1" -- "0..*" Panne: a lieu pendant
+    HistSaison "1" -- "0..*" HistPanne: a lieu pendant
     HistSaison "1" -- "0..*" HistCours: a lieu pendant
     HistSaison "1" -- "0..*" HistLocation: a lieu pendant
 
