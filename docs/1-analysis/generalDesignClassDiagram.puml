@@ -7,21 +7,19 @@
         telephone
         est_diplome
         permis_bateau
+        specialite
     }
 
     class GarçonDePlage extends Personnel {
         date_embauche
         tarif_horaire
-        specialite
     }
 
     class Moniteur extends Personnel {
         tarif_horaire
-        specialite
     }
 
     class Proprietaire extends Personnel {
-        specialite
     }
 
     class Saison {
