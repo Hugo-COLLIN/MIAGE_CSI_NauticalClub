@@ -10,12 +10,18 @@
     }
 
     class GarçonDePlage extends Personnel {
+        date_embauche
+        tarif_horaire
+        specialite
     }
 
     class Moniteur extends Personnel {
+        tarif_horaire
+        specialite
     }
 
     class Proprietaire extends Personnel {
+        specialite
     }
 
     class Saison {
@@ -183,7 +189,6 @@
     Saison "1" -- "0..*" ArchiveLocation: a lieu pendant
     ArchiveSaison "1..*" -- "2..*" Personnel: embauche
     ArchiveSaison "1" -- "0..*" Cours: a lieu pendant
-    ArchiveSaison "1" -- "0..*" Location: a lieu pendant
     ArchiveSaison "1" - "0..*" ArchivePanne: a lieu pendant
     ArchiveSaison "1" -- "0..*" ArchiveCours: a lieu pendant
     ArchiveSaison "1" -- "0..*" ArchiveLocation: a lieu pendant
