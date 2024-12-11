@@ -5,7 +5,7 @@
         prenom
         email
         telephone
-        diplome
+        est_diplome
         permis_bateau
     }
 
@@ -164,10 +164,10 @@
     Personnel "1" -- "0..*" Location: supervise
     Materiel "1" -- "0..*" Panne: peut tomber en panne
     Materiel "1" -- "0..*" HistPanne: peut tomber en panne
-    Materiel "0..*" -- "1" Stock: est stocké dans
+    Materiel "0..*" --- "1" Stock: est stocké dans
     Materiel "0..*" -- "1" HistStock: est stocké dans
     HistCours "1" -- "0..*" HistForfait: utilisé pour
-    Personnel "1" -- "0..*" HistCours : anime
+    Personnel "1" --- "0..*" HistCours : anime
     HistForfait "1" -- "0..*" Client: possède
     Partenaire "1" -- "1..*" Forfait: vend
     HistPartenaire "1" -- "1..*" HistForfait: vend
@@ -182,7 +182,7 @@
     Saison "1" -- "0..*" HistLocation: a lieu pendant
     HistSaison "1..*" -- "2..*" Personnel: embauche
     HistSaison "1" -- "0..*" Cours: a lieu pendant
-    HistSaison "1" - "0..*" Location: a lieu pendant
+    HistSaison "1" -- "0..*" Location: a lieu pendant
     HistSaison "1" -- "0..*" Panne: a lieu pendant
     HistSaison "1" -- "0..*" HistCours: a lieu pendant
     HistSaison "1" -- "0..*" HistLocation: a lieu pendant
