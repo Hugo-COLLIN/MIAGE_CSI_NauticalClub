@@ -166,6 +166,13 @@
         type_paiement
     }
 
+    class ArchivePaiement {
+        id_archive_paiement
+        date_paiement
+        montant
+        type_paiement
+    }
+
     Client "1" -- "0..*" Forfait: possède
     Client "1" -- "0..*" Location: effectue
     Personnel "1" -- "0..*" Cours: anime
@@ -192,5 +199,6 @@
     ArchiveSaison "1" - "0..*" ArchivePanne: a lieu pendant
     ArchiveSaison "1" -- "0..*" ArchiveCours: a lieu pendant
     ArchiveSaison "1" -- "0..*" ArchiveLocation: a lieu pendant
+    ArchivePaiement "1" -- "1..*" ArchiveForfait: payé pour
 
 @enduml
