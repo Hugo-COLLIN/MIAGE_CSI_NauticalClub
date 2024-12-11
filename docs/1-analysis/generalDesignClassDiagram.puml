@@ -24,8 +24,8 @@
         date_fin
     }
 
-    class HistSaison {
-        id_hist_saison
+    class ArchiveSaison {
+        id_archive_saison
         date_debut
         date_fin
     }
@@ -48,8 +48,26 @@
         numero_serie
     }
 
+    class ArchiveMateriel {
+        id_archive_materiel
+        type_materiel
+        caracteristiques
+        etat
+        date_acquisition
+        numero_serie
+    }
+
     class Forfait {
         id_forfait
+        type_forfait
+        prix
+        date_achat
+        date_expiration
+        seances_restantes
+    }
+
+    class ArchiveForfait {
+        id_archive_forfait
         type_forfait
         prix
         date_achat
@@ -64,15 +82,7 @@
         email
         telephone
         type_partenaire
-    }
-
-    class HistPartenaire {
-        id_hist_partenaire
-        nom
-        adresse
-        email
-        telephone
-        type_partenaire
+        est_actif
     }
 
     class Camping {
@@ -81,15 +91,6 @@
         adresse
         email
         telephone
-    }
-
-    class HistForfait {
-        id_hist_forfait
-        type_forfait
-        prix
-        date_achat
-        date_expiration
-        seances_restantes
     }
 
     class Cours {
@@ -102,8 +103,8 @@
         capacite_max
     }
 
-    class HistCours {
-        id_hist_cours
+    class ArchiveCours {
+        id_archive_cours
         date_cours
         heure_debut
         niveau
@@ -121,8 +122,8 @@
         supplements
     }
 
-    class HistLocation {
-        id_hist_location
+    class ArchiveLocation {
+        id_archive_location
         date_debut
         date_fin_prevue
         date_retour
@@ -138,8 +139,8 @@
         description
     }
 
-    class HistPanne {
-        id_hist_panne
+    class ArchivePanne {
+        id_archive_panne
         date_panne
         date_reparation
         cout_reparation
@@ -148,12 +149,6 @@
 
     class Stock {
         id_stock
-        type_materiel
-        quantite
-    }
-
-    class HistStock {
-        id_hist_stock
         type_materiel
         quantite
     }
@@ -172,14 +167,12 @@
     Forfait "1" -- "0..*" Cours: utilisé pour
     Personnel "1" -- "0..*" Location: supervise
     Materiel "1" -- "0..*" Panne: peut tomber en panne
-    Materiel "1" -- "0..*" HistPanne: peut tomber en panne
+    ArchiveMateriel "1" -- "0..*" ArchivePanne: peut tomber en panne
     Materiel "0..*" -- "1" Stock: est stocké dans
-    Materiel "0..*" -- "1" HistStock: est stocké dans
-    HistCours "1" -- "0..*" HistForfait: utilisé pour
-    Personnel "1" -- "0..*" HistCours : anime
-    HistForfait "1" -- "0..*" Client: possède
+    ArchiveCours "1" -- "0..*" ArchiveForfait: utilisé pour
+    Personnel "1" --- "0..*" ArchiveCours : anime
+    ArchiveForfait "1" -- "0..*" Client: possède
     Partenaire "1" -- "1..*" Forfait: vend
-    HistPartenaire "1" -- "1..*" HistForfait: vend
     Camping "1" -- "1..*" Client: accueille
     Materiel "1" - "1" Cours: est utilisé pour
     Paiement "1" -- "1..*" Forfait: payé pour
@@ -187,12 +180,12 @@
     Saison "1" -- "0..*" Cours: a lieu pendant
     Saison "1" -- "0..*" Location: a lieu pendant
     Saison "1" -- "0..*" Panne: a lieu pendant
-    Saison "1" -- "0..*" HistLocation: a lieu pendant
-    HistSaison "1..*" -- "2..*" Personnel: embauche
-    HistSaison "1" -- "0..*" Cours: a lieu pendant
-    HistSaison "1" -- "0..*" Location: a lieu pendant
-    HistSaison "1" -- "0..*" HistPanne: a lieu pendant
-    HistSaison "1" -- "0..*" HistCours: a lieu pendant
-    HistSaison "1" -- "0..*" HistLocation: a lieu pendant
+    Saison "1" -- "0..*" ArchiveLocation: a lieu pendant
+    ArchiveSaison "1..*" -- "2..*" Personnel: embauche
+    ArchiveSaison "1" -- "0..*" Cours: a lieu pendant
+    ArchiveSaison "1" -- "0..*" Location: a lieu pendant
+    ArchiveSaison "1" - "0..*" ArchivePanne: a lieu pendant
+    ArchiveSaison "1" -- "0..*" ArchiveCours: a lieu pendant
+    ArchiveSaison "1" -- "0..*" ArchiveLocation: a lieu pendant
 
 @enduml
