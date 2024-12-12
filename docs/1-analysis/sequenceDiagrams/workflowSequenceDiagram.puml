@@ -17,7 +17,7 @@ title Workflow général de l'application du club nautique
 A -> App : Créer un compte
 activate A
 activate App
-App -> DB : enregistrerNouveauCompte(utilisateur): booleen
+App -> DB : enregistrerNouveauCompte()
 activate DB
 DB --> App
 deactivate DB
@@ -84,11 +84,11 @@ end
 
 App -> Mat : verifierDisponibiliteMoniteurEtMateriel()
 activate Mat
-Mat -> DB : verifierStatutMateriel(coursId): booleen
+Mat -> DB : verifierStatutMateriel()
 activate DB
 DB --> Mat : statutMateriel
 deactivate DB
-Mat --> DB : verifierStatutMoniteur(coursId): booleen
+Mat --> DB : verifierStatutMoniteur()
 activate DB
 DB --> Mat : statutMoniteur
 deactivate DB
@@ -102,13 +102,19 @@ Camp --> DB : calculerRemiseCamping(): pourcentage
 deactivate Camp
 '/
 
-App -> Forf : calculerPrixForfait(coursId, remise): montant
+App -> Forf : calculerPrixForfait()
 activate Forf
 Forf --> App : montantForfait
 deactivate Forf
 
-App -> Pay : initialiserPaiement(montant, remise): transactionPaiement
+App -> Pay : initialiserPaiement()
 activate Pay
+Pay -> Camp : verifierSiCampingPartenaire()
+activate Camp
+Camp --> Pay : pourcentageRemise
+deactivate Camp
+Pay -> Pay : appliquerRemise()
+
 Pay --> C : Demander la saisie des informations de paiement
 activate C
 C --> Pay : Saisir les informations de paiement
@@ -124,7 +130,7 @@ end
 
 App -> DB : enregistrerInscription()
 activate DB
-DB -> Mat : reserverMateriel(coursId): reservationMateriel
+DB -> Mat : reserverMateriel()
 activate Mat
 Mat --> DB : confirmationReservationMateriel
 deactivate Mat
