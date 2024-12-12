@@ -34,9 +34,9 @@ else Se connecter comme "Propriétaire"
 end
 
 App -> DB : Vérifier les informations de connexion
-    activate DB
-    DB --> App : Connexion réussie
-    deactivate DB
+activate DB
+DB --> App : Informations vérifiées
+deactivate DB
 
 alt Se connecter comme "Moniteur"
     App --> M : Connexion réussie
