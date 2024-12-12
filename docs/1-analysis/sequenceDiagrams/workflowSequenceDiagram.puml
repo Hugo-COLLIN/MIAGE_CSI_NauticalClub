@@ -13,17 +13,27 @@ participant ":Paiement" as Pay
 
 title Workflow général de l'application du club nautique
 
+' --- Création de compte ---
 A -> App : Créer un compte
 activate A
 activate App
-App -> DB : Enregistrer nouveau compte
+App -> DB : enregistrerNouveauCompte(utilisateur): booleen
 activate DB
-DB --> App : Compte créé
+DB --> App
 deactivate DB
 App --> A : Confirmation de création de compte
 deactivate App
 deactivate A
 
+/'
+alt Inscription par le Moniteur
+    M -> App : Indiquer affiliation à un camping partenaire
+else Inscription par le Propriétaire
+    P -> App : Indiquer affiliation à un camping partenaire
+end
+'/
+
+' --- Authentification ---
 alt Se connecter comme "Moniteur"
     M -> App : Se connecter
     activate M
@@ -33,9 +43,9 @@ else Se connecter comme "Propriétaire"
     activate P
 end
 
-App -> DB : Vérifier les informations de connexion
+App -> DB : verifierInformationsAuthentification()
 activate DB
-DB --> App : Informations vérifiées
+DB --> App : informationsVerifiees
 deactivate DB
 
 alt Se connecter comme "Moniteur"
@@ -47,6 +57,7 @@ else Se connecter comme "Propriétaire"
     deactivate App
 end
 
+' --- Inscription à un cours ---
 alt Inscription par le Moniteur
     M -> App : S'inscrire à un cours (niveau, forfait choisi)
     activate M
@@ -58,68 +69,72 @@ end
 
 activate App
 
-App -> DB : Récupérer liste des cours disponibles
+App -> DB : demanderListeCoursDisponibles()
 activate DB
-DB --> App : Liste des cours disponibles
+DB --> App : coursDisponibles
 deactivate DB
 
 alt Inscription par le Moniteur
+    App -> M : Afficher les cours disponibles
     M -> App : Sélectionner un cours (date, horaire)
 else Inscription par le Propriétaire
+    App -> P : Afficher les cours disponibles
     P -> App : Sélectionner un cours (date, horaire)
 end
 
-App -> DB : Vérifier disponibilité du moniteur et du matériel
-activate DB
-DB -> Mat : Vérifier statut du matériel
+App -> Mat : verifierDisponibiliteMoniteurEtMateriel()
 activate Mat
-Mat --> DB : Matériel disponible
+Mat -> DB : verifierStatutMateriel(coursId): booleen
+activate DB
+DB --> Mat : statutMateriel
+deactivate DB
+Mat --> DB : verifierStatutMoniteur(coursId): booleen
+activate DB
+DB --> Mat : statutMoniteur
+deactivate DB
+Mat --> App : disponibiliteMoniteurEtMateriel
 deactivate Mat
+
+/'
+DB -> Camp : verifierAffiliation()
+activate Camp
+Camp --> DB : calculerRemiseCamping(): pourcentage
+deactivate Camp
+'/
+
+App -> Forf : calculerPrixForfait(coursId, remise): montant
+activate Forf
+Forf --> App : montantForfait
+deactivate Forf
+
+App -> Pay : initialiserPaiement(montant, remise): transactionPaiement
+activate Pay
+Pay --> C : Demander la saisie des informations de paiement
+activate C
+C --> Pay : Saisir les informations de paiement
+deactivate C
+Pay --> App : validationPaiement
+deactivate Pay
 
 alt Inscription par le Moniteur
-    M -> App : Indiquer affiliation à un camping partenaire
+    App -> M : Paiement validé
 else Inscription par le Propriétaire
-    P -> App : Indiquer affiliation à un camping partenaire
+    App -> P : Paiement validé
 end
 
-DB -> Camp : Vérifier affiliation
-activate Camp
-Camp --> DB : Remise confirmée (10%)
-deactivate Camp
-
-DB --> App : Disponibilité et remise confirmées
-deactivate DB
-
-C -> App : Saisir les informations de paiement
-activate C
-activate App
-App -> Pay : Lancer le paiement (prix ajusté)
-activate Pay
-Pay --> App : Paiement validé
-deactivate Pay
-App --> C : Paiement validé
-deactivate C
-deactivate App
-
-App -> DB : Enregistrer inscription
+App -> DB : enregistrerInscription()
 activate DB
-DB -> Mat : Réserver matériel pour le cours
+DB -> Mat : reserverMateriel(coursId): reservationMateriel
 activate Mat
-Mat --> DB : Réservation confirmée
+Mat --> DB : confirmationReservationMateriel
 deactivate Mat
-DB --> App : Inscription enregistrée
+DB --> App : confirmationEnregistrementInscription
 deactivate DB
 
 alt Inscription par le Moniteur
     App -> M : Notifier le moniteur (détails du cours)
-    activate M
-    M --> App : Confirmation réception
-    deactivate M
 else Inscription par le Propriétaire
     App -> P : Notifier le propriétaire (détails du cours)
-    activate P
-    P --> App : Confirmation réception
-    deactivate P
 end
 
 App -> P : Envoyer rapport de l'inscription
