@@ -1,5 +1,5 @@
 @startuml
-    title État d'un matériel
+    title États d'un matériel
 
     [*] --> Recu: acquerir()
     Recu --> EnService: verifier()

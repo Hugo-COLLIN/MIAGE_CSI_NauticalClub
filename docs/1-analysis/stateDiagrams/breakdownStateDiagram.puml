@@ -1,5 +1,5 @@
 @startuml
-    title État d'une panne
+    title États d'une panne
 
     [*] --> Signalee
     Signalee --> HorsService: declarerHorsService()
