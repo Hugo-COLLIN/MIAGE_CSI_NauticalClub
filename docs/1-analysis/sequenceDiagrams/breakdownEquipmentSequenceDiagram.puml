@@ -1,0 +1,68 @@
+@startuml
+@startuml
+!theme plain
+title Gestion des pannes de matériel
+
+actor ":Client" as C
+actor ":Moniteur" as M
+actor ":Propriétaire" as Proprietaire
+participant ":SYSTEME" as Systeme
+participant "Base de Données" as DB
+participant "Matériel" as Materiel
+
+== Signalement de Panne ==
+
+Employe -> Systeme : Signaler une panne
+activate Employe
+activate Systeme
+
+Systeme -> Materiel : Vérifier l'état du matériel
+activate Materiel
+
+Systeme -> DB : Enregistrer le signalement de panne
+activate DB
+DB --> Systeme : Confirmation d'enregistrement
+deactivate DB
+
+Systeme -> Employe : Demander des détails supplémentaires
+Employe -> Systeme : Ajouter des commentaires (optionnel)
+Systeme -> DB : Enregistrer les commentaires
+activate DB
+DB --> Systeme : Confirmation
+deactivate DB
+
+Systeme -> Proprietaire : Notification de signalement de panne
+activate Proprietaire
+
+== Qualification de la Panne ==
+
+Proprietaire -> Systeme : Examiner le signalement
+Proprietaire -> Systeme : Qualifier l'état de la panne
+alt Matériel encore réparable
+    Systeme -> Materiel : Mettre à jour le statut "En réparation"
+    Systeme -> DB : Enregistrer le nouveau statut
+else Matériel hors-service
+    Systeme -> Materiel : Mettre à jour le statut "Hors-service"
+    Systeme -> DB : Enregistrer le statut définitif
+end
+
+== Consultation des Pannes ==
+
+Proprietaire -> Systeme : Consulter l'historique des pannes
+Systeme -> DB : Récupérer l'historique des pannes
+DB --> Systeme : Liste des pannes
+Systeme -> Proprietaire : Afficher l'historique des pannes
+
+== Génération de Rapport ==
+
+Proprietaire -> Systeme : Générer un rapport de pannes
+Systeme -> DB : Requête de rapport de pannes
+DB --> Systeme : Données de pannes
+Systeme -> Proprietaire : Afficher le rapport détaillé
+
+deactivate Proprietaire
+deactivate Systeme
+deactivate Materiel
+
+@enduml
+@enduml

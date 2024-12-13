@@ -17,6 +17,7 @@
 
     class Moniteur extends Personnel {
         tarif_horaire
+        niveau_experimente
     }
 
     class Proprietaire extends Personnel {
@@ -153,7 +154,6 @@
 
     class Stock {
         id_stock
-        type_materiel
         quantite
     }
 
@@ -169,6 +169,20 @@
         date_paiement
         montant
         type_paiement
+    }
+
+    enum StatutPanne {
+        EnPanne
+        EnReparation
+        Reparee
+        AuRebut
+    }
+
+    enum StatutMateriel {
+        Recu
+        EnService
+        EnPanne
+        AuRebut
     }
 
     Client "1" -- "0..*" Forfait: possède
