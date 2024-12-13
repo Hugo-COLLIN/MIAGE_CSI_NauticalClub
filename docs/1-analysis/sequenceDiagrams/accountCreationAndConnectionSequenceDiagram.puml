@@ -1,19 +1,13 @@
 @startuml
-actor ":Client" as C
-actor ":Moniteur" as M
-actor ":Propriétaire" as P
+actor ":Personnel" as P
 actor ":Gestionnaire du système" as A
-participant ":SYSTEME" as App
+participant ":Système" as App
 participant ":Base de donnees" as DB
-participant ":Matériel" as Mat
-participant ":Cours" as Cour
-participant ":Forfait" as Forf
-participant ":Camping" as Camp
-participant ":Paiement" as Pay
 
 title Création de compte et connexion
 
-' --- Création de compte ---
+== Création de compte ==
+
 A -> App : Créer un compte
 activate A
 activate App
@@ -25,35 +19,17 @@ App --> A : Confirmation de création de compte
 deactivate App
 deactivate A
 
-/'
-alt Inscription par le Moniteur
-    M -> App : Indiquer affiliation à un camping partenaire
-else Inscription par le Propriétaire
-    P -> App : Indiquer affiliation à un camping partenaire
-end
-'/
+== Connexion ==
+P -> App : Se connecter
+activate P
+activate App
 
-' --- Authentification ---
-alt Se connecter comme "Moniteur"
-    M -> App : Se connecter
-    activate M
-    activate App
-else Se connecter comme "Propriétaire"
-    P -> App : Se connecter
-    activate P
-end
-
-App -> DB : verifierInformationsAuthentification()
+App -> DB : verifierInformationsConnexion()
 activate DB
 DB --> App : informationsVerifiees
 deactivate DB
 
-alt Se connecter comme "Moniteur"
-    App --> M : Connexion réussie
-    deactivate M
-else Se connecter comme "Propriétaire"
-    App --> P : Connexion réussie
-    deactivate P
-    deactivate App
-end
+App --> P : Connexion réussie
+deactivate P
+deactivate App
 @enduml
