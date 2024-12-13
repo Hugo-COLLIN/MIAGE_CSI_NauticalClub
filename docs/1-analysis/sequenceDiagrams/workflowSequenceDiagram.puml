@@ -95,13 +95,6 @@ deactivate DB
 Mat --> App : disponibiliteMoniteurEtMateriel
 deactivate Mat
 
-/'
-DB -> Camp : verifierAffiliation()
-activate Camp
-Camp --> DB : calculerRemiseCamping(): pourcentage
-deactivate Camp
-'/
-
 App -> Forf : calculerPrixForfait()
 activate Forf
 
