@@ -1,0 +1,99 @@
+@startuml
+actor ":Client" as C
+actor ":Moniteur" as M
+actor ":Propriétaire" as P
+actor "Gestionnaire du système" as A
+participant ":SYSTEME" as App
+participant ":Base de donnees" as DB
+participant ":Matériel" as Mat
+participant ":Cours" as Cour
+participant ":Forfait" as Forf
+participant ":Camping" as Camp
+participant ":Paiement" as Pay
+
+title Location de matériel
+
+alt Réservation par le Moniteur
+    M -> App : Faire la réservation
+    activate M
+    activate App
+else Réservation par le Propriétaire
+    P -> App : Faire la réservation
+    activate P
+end
+
+activate App
+
+App -> Mat : demanderListeMaterielsDisponibles()
+activate Mat
+Mat -> DB : requeteListeMaterielsDisponibles()
+activate DB
+DB --> Mat : materielsDisponibles
+deactivate DB
+Mat --> App : listeMaterielsDisponibles
+deactivate Mat
+
+alt Inscription par le Moniteur
+    App -> M : Afficher les matériels disponibles
+    M -> App : Sélectionner un matériel (date, horaire)
+else Inscription par le Propriétaire
+    App -> P : Afficher les matériels disponibles
+    P -> App : Sélectionner un matériel (date, horaire)
+end
+
+App -> Mat : calculerPrixReservation()
+activate Mat
+
+Forf -> Camp : verifierSiCampingPartenaire()
+activate Camp
+Camp --> Forf : pourcentageRemise
+deactivate Camp
+Forf -> Forf : appliquerRemise()
+
+Mat --> App : montantReservation
+deactivate Mat
+
+App -> Pay : initialiserPaiement()
+activate Pay
+Pay --> C : Demander la saisie des informations de paiement
+activate C
+C --> Pay : Saisir les informations de paiement
+deactivate C
+Pay --> App : validationPaiement
+deactivate Pay
+
+alt Inscription par le Moniteur
+    App -> M : Paiement validé
+else Inscription par le Propriétaire
+    App -> P : Paiement validé
+end
+
+App -> Mat : enregistrerReservationMateriel()
+activate Mat
+DB -> Mat : reserverMateriel()
+activate DB
+Mat --> DB : confirmationReservationMateriel
+deactivate DB
+Mat --> App : confirmationEnregistrementReservationMateriel
+deactivate Mat
+
+alt Inscription par le Moniteur
+    App -> M : Notifier le moniteur (détails du cours)
+else Inscription par le Propriétaire
+    App -> P : Notifier le propriétaire (détails du cours)
+end
+
+App -> P : Envoyer rapport de l'inscription
+activate P
+P --> App : Accusé de réception
+deactivate P
+
+alt Inscription par le Moniteur
+    App --> M : Confirmation d'inscription (détails cours, remise, reçu)
+    deactivate M
+else Inscription par le Propriétaire
+    App --> P : Confirmation d'inscription (détails cours, remise, reçu)
+    deactivate App
+    deactivate P
+end
+@enduml
