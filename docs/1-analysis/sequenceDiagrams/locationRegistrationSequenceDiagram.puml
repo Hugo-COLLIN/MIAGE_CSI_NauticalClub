@@ -3,7 +3,7 @@ actor ":Client" as C
 actor ":Moniteur" as M
 actor ":Propriétaire" as P
 actor ":Gestionnaire du système" as A
-participant ":SYSTEME" as App
+participant ":Système" as App
 participant ":Base de donnees" as DB
 participant ":Matériel" as Mat
 participant ":Cours" as Cour
