@@ -7,7 +7,6 @@ participant ":SYSTEME" as App
 participant ":Base de donnees" as DB
 participant ":Matériel" as Mat
 participant ":Cours" as Cour
-participant ":Forfait" as Forf
 participant ":Camping" as Camp
 participant ":Paiement" as Pay
 
@@ -44,11 +43,11 @@ end
 App -> Mat : calculerPrixReservation()
 activate Mat
 
-Forf -> Camp : verifierSiCampingPartenaire()
+Mat -> Camp : verifierSiCampingPartenaire()
 activate Camp
-Camp --> Forf : pourcentageRemise
+Camp --> Mat : pourcentageRemise
 deactivate Camp
-Forf -> Forf : appliquerRemise()
+Mat -> Mat : appliquerRemise()
 
 Mat --> App : montantReservation
 deactivate Mat
@@ -70,9 +69,9 @@ end
 
 App -> Mat : enregistrerReservationMateriel()
 activate Mat
-DB -> Mat : reserverMateriel()
+DB <- Mat : reserverMateriel()
 activate DB
-Mat --> DB : confirmationReservationMateriel
+Mat <-- DB : confirmationReservationMateriel
 deactivate DB
 Mat --> App : confirmationEnregistrementReservationMateriel
 deactivate Mat
