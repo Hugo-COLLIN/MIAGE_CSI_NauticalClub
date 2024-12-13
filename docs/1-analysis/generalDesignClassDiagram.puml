@@ -172,10 +172,10 @@
     }
 
     enum StatutPanne {
-        EnPanne
-        EnReparation
+        Signalee
+        Reparation
         Reparee
-        AuRebut
+        HorsService
     }
 
     enum StatutMateriel {

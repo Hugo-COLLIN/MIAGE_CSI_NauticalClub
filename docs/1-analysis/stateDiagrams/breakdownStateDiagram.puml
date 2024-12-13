@@ -2,10 +2,10 @@
     title État d'une panne
 
     [*] --> Signalee
-    Signalee --> Rebut: mettreAuRebut()
+    Signalee --> HorsService: declarerHorsService()
     Signalee --> Reparation: envoyerEnReparation()
     Reparation --> Repare: reparer()
-    Reparation --> Rebut: mettreAuRebut()
+    Reparation --> HorsService: declarerHorsService()
     Repare --> [*]
-    Rebut --> [*]
+    HorsService --> [*]
 @enduml
