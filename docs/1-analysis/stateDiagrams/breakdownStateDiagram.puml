@@ -1,11 +1,11 @@
 @startuml
     title État d'une panne
 
-    [*] --> EnPanne
-    EnPanne --> Rebut: mettreAuRebut()
-    EnPanne --> EnReparation: envoyerEnReparation()
-    EnReparation --> Repare: reparer()
-    EnReparation --> Rebut: mettreAuRebut()
+    [*] --> Signalee
+    Signalee --> Rebut: mettreAuRebut()
+    Signalee --> Reparation: envoyerEnReparation()
+    Reparation --> Repare: reparer()
+    Reparation --> Rebut: mettreAuRebut()
     Repare --> [*]
     Rebut --> [*]
 @enduml
