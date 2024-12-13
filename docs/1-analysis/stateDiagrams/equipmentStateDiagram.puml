@@ -1,0 +1,21 @@
+@startuml
+    title État d'un matériel
+
+    [*] --> Recu: acquerir()
+    Recu --> EnService: verifier()
+    EnService --> EnPanne: signalerPanne()
+    EnPanne --> EnService: reparer()
+    EnPanne --> AuRebut: mettreAuRebut()
+    EnService --> AuRebut: mettreAuRebut()
+    AuRebut --> [*]
+
+    note right of EnService
+        Peut être loué ou
+        utilisé pour les cours
+    end note
+
+    note right of EnPanne
+        Non disponible pour
+        location/cours
+    end note
+@enduml
