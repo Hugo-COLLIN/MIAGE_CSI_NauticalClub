@@ -59,11 +59,11 @@ end
 
 ' --- Inscription à un cours ---
 alt Inscription par le Moniteur
-    M -> App : S'inscrire à un cours (niveau, forfait choisi)
+    M -> App : Inscrire un client à un cours (niveau, forfait choisi)
     activate M
     activate App
 else Inscription par le Propriétaire
-    P -> App : S'inscrire à un cours (niveau, forfait choisi)
+    P -> App : Inscrire un client à un cours (niveau, forfait choisi)
     activate P
 end
 
@@ -104,17 +104,18 @@ deactivate Camp
 
 App -> Forf : calculerPrixForfait()
 activate Forf
+
+Forf -> Camp : verifierSiCampingPartenaire()
+activate Camp
+Camp --> Forf : pourcentageRemise
+deactivate Camp
+Forf -> Forf : appliquerRemise()
+
 Forf --> App : montantForfait
 deactivate Forf
 
 App -> Pay : initialiserPaiement()
 activate Pay
-Pay -> Camp : verifierSiCampingPartenaire()
-activate Camp
-Camp --> Pay : pourcentageRemise
-deactivate Camp
-Pay -> Pay : appliquerRemise()
-
 Pay --> C : Demander la saisie des informations de paiement
 activate C
 C --> Pay : Saisir les informations de paiement
@@ -128,14 +129,14 @@ else Inscription par le Propriétaire
     App -> P : Paiement validé
 end
 
-App -> DB : enregistrerInscription()
-activate DB
-DB -> Mat : reserverMateriel()
+App -> Mat : enregistrerReservationMateriel()
 activate Mat
+DB -> Mat : reserverMateriel()
+activate DB
 Mat --> DB : confirmationReservationMateriel
-deactivate Mat
-DB --> App : confirmationEnregistrementInscription
 deactivate DB
+Mat --> App : confirmationEnregistrementReservationMateriel
+deactivate Mat
 
 alt Inscription par le Moniteur
     App -> M : Notifier le moniteur (détails du cours)
@@ -149,10 +150,10 @@ P --> App : Accusé de réception
 deactivate P
 
 alt Inscription par le Moniteur
-    App --> M : Envoyer confirmation d'inscription (détails cours, remise, reçu)
+    App --> M : Confirmation d'inscription (détails cours, remise, reçu)
     deactivate M
 else Inscription par le Propriétaire
-    App --> P : Envoyer confirmation d'inscription (détails cours, remise, reçu)
+    App --> P : Confirmation d'inscription (détails cours, remise, reçu)
     deactivate App
     deactivate P
 end
