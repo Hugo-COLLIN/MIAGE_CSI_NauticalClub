@@ -1,68 +1,106 @@
 @startuml
-@startuml
-!theme plain
-title Gestion des pannes de matériel
-
-actor ":Client" as C
-actor ":Moniteur" as M
+actor ":Personnel" as Personnel
 actor ":Propriétaire" as Proprietaire
-participant ":SYSTEME" as Systeme
-participant "Base de Données" as DB
-participant "Matériel" as Materiel
+participant ":Système" as Systeme
+participant ":Base de données" as BDD
+participant ":Matériel" as Materiel
 
-== Signalement de Panne ==
+title Gestion des Pannes de Matériel
 
-Employe -> Systeme : Signaler une panne
-activate Employe
+== Signalement d'une Panne ==
+Personnel -> Systeme : signaler une panne
+activate Personnel
 activate Systeme
 
-Systeme -> Materiel : Vérifier l'état du matériel
+Systeme -> BDD : vérifier les détails du matériel
+activate BDD
+BDD --> Systeme : informations du matériel
+deactivate BDD
+
+Systeme -> Materiel : changer statut à "EnPanne"
 activate Materiel
+Materiel -> BDD : mettre à jour le statut
+activate BDD
+BDD --> Materiel : confirmation de mise à jour
+deactivate BDD
 
-Systeme -> DB : Enregistrer le signalement de panne
-activate DB
-DB --> Systeme : Confirmation d'enregistrement
-deactivate DB
+Systeme -> Systeme : créer une nouvelle entrée Panne
+Systeme -> BDD : enregistrer les détails de la panne
+activate BDD
+note right: Inclut commentaires, date, description
+BDD --> Systeme : confirmation d'enregistrement
+deactivate BDD
 
-Systeme -> Employe : Demander des détails supplémentaires
-Employe -> Systeme : Ajouter des commentaires (optionnel)
-Systeme -> DB : Enregistrer les commentaires
-activate DB
-DB --> Systeme : Confirmation
-deactivate DB
-
-Systeme -> Proprietaire : Notification de signalement de panne
-activate Proprietaire
+Systeme --> Personnel : confirmation de signalement
+deactivate Systeme
+deactivate Personnel
 
 == Qualification de la Panne ==
+Proprietaire -> Systeme : qualifier la panne
+activate Proprietaire
+activate Systeme
 
-Proprietaire -> Systeme : Examiner le signalement
-Proprietaire -> Systeme : Qualifier l'état de la panne
-alt Matériel encore réparable
-    Systeme -> Materiel : Mettre à jour le statut "En réparation"
-    Systeme -> DB : Enregistrer le nouveau statut
-else Matériel hors-service
-    Systeme -> Materiel : Mettre à jour le statut "Hors-service"
-    Systeme -> DB : Enregistrer le statut définitif
+alt Panne réparable
+    Systeme -> Materiel : évaluer la réparabilité
+    activate Materiel
+    Materiel -> BDD : vérifier historique des pannes
+    activate BDD
+    BDD --> Materiel : historique des pannes
+    deactivate BDD
+
+    Proprietaire -> Systeme : décider de réparer
+    Systeme -> Materiel : programmer réparation
+    Materiel -> BDD : mettre à jour statut "Reparation"
+    activate BDD
+    BDD --> Materiel : confirmation
+    deactivate BDD
+else Matériel non réparable
+    Proprietaire -> Systeme : déclarer hors service
+    Systeme -> Materiel : changer statut "HorsService"
+    Materiel -> BDD : mettre à jour statut
+    activate BDD
+    BDD --> Materiel : confirmation
+    deactivate BDD
 end
 
-== Consultation des Pannes ==
-
-Proprietaire -> Systeme : Consulter l'historique des pannes
-Systeme -> DB : Récupérer l'historique des pannes
-DB --> Systeme : Liste des pannes
-Systeme -> Proprietaire : Afficher l'historique des pannes
-
-== Génération de Rapport ==
-
-Proprietaire -> Systeme : Générer un rapport de pannes
-Systeme -> DB : Requête de rapport de pannes
-DB --> Systeme : Données de pannes
-Systeme -> Proprietaire : Afficher le rapport détaillé
-
-deactivate Proprietaire
+Systeme --> Proprietaire : confirmation de qualification
 deactivate Systeme
-deactivate Materiel
 
-@enduml
+== Résolution de la Panne ==
+Personnel -> Systeme : marquer panne réparée
+activate Personnel
+activate Systeme
+
+Systeme -> Materiel : changer statut à "EnService"
+activate Materiel
+Materiel -> BDD : mettre à jour le statut
+activate BDD
+BDD --> Materiel : confirmation de mise à jour
+deactivate BDD
+
+Systeme -> BDD : enregistrer détails de réparation
+activate BDD
+note right: Coût, date, détails techniques
+BDD --> Systeme : confirmation
+deactivate BDD
+
+Systeme --> Personnel : confirmation de résolution
+deactivate Systeme
+deactivate Personnel
+
+== Consultation Historique ==
+Proprietaire -> Systeme : consulter historique des pannes
+activate Proprietaire
+activate Systeme
+
+Systeme -> BDD : extraire historique des pannes
+activate BDD
+BDD --> Systeme : liste des pannes par matériel
+deactivate BDD
+
+Systeme --> Proprietaire : afficher rapport détaillé
+note right: Inclut pannes par période, coûts, matériels
+deactivate Systeme
+deactivate Proprietaire
+
 @enduml
