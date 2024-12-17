@@ -16,11 +16,13 @@
     }
 
     class Moniteur extends Personnel {
+        date_embauche
         tarif_horaire
         niveau_experimente
     }
 
     class Proprietaire extends Personnel {
+        date_prise_fonction
     }
 
     class Saison {
