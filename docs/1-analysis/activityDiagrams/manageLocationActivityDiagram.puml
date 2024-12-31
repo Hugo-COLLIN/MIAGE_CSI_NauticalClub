@@ -1,0 +1,46 @@
+@startuml
+    [*] --> VerifierDisponibilite
+    VerifierDisponibilite --> ChoisirMateriel: Matériel disponible
+    VerifierDisponibilite --> Fin: Pas de matériel disponible
+
+    ChoisirMateriel --> VerifierClient
+
+    VerifierClient --> VerifierCampingPartenaire: Client existant
+    VerifierClient --> CreerClient: Nouveau client
+    CreerClient --> VerifierCampingPartenaire
+
+    VerifierCampingPartenaire --> CalculerPrix
+    CalculerPrix --> AppliquerRemise: Client camping partenaire
+    AppliquerRemise --> ProcessusPaiement
+    CalculerPrix --> ProcessusPaiement: Client standard
+
+    ProcessusPaiement --> RemiseMateriel: Paiement OK
+    ProcessusPaiement --> Fin: Paiement échoué
+
+    RemiseMateriel --> AttenteRetour
+
+    AttenteRetour --> VerifierEtat: Retour dans les temps
+    AttenteRetour --> CalculerSupplements: Retour en retard
+    CalculerSupplements --> VerifierEtat
+
+    VerifierEtat --> CloturerLocation: État OK
+    VerifierEtat --> DeclarerPanne: Dégâts constatés
+    DeclarerPanne --> FacturerReparations
+    FacturerReparations --> CloturerLocation
+
+    CloturerLocation --> [*]
+    Fin --> [*]
+
+    note right of VerifierDisponibilite
+        Vérifier stock et planning
+    end note
+
+    note right of CalculerPrix
+        Prix base + durée prévue
+    end note
+
+    note right of AttenteRetour
+        Délai standard: retour
+        prévu + 15min tolérance
+    end note
+@enduml

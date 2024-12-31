@@ -1,0 +1,54 @@
+@startuml
+    [*] --> VerifierNiveau
+
+    VerifierNiveau --> ChoisirCours: Niveau déterminé
+    ChoisirCours --> VerifierPlaces: Cours disponible
+    ChoisirCours --> ChoisirAutreCours: Cours complet
+    ChoisirAutreCours --> ChoisirCours
+
+    VerifierPlaces --> VerifierClient: Places disponibles
+    VerifierPlaces --> Fin: Pas de place
+
+    VerifierClient --> VerifierForfait: Client existant
+    VerifierClient --> CreerClient: Nouveau client
+    CreerClient --> VerifierForfait
+
+    VerifierForfait --> AttributionMateriel: Forfait valide
+    VerifierForfait --> CreerForfait: Pas de forfait
+    CreerForfait --> ProcessusPaiement
+
+    ProcessusPaiement --> AttributionMateriel: Paiement OK
+    ProcessusPaiement --> Fin: Paiement échoué
+
+    AttributionMateriel --> ConfirmerInscription: Matériel disponible
+    AttributionMateriel --> Fin: Pas de matériel
+
+    ConfirmerInscription --> AttenteMeteo
+
+    AttenteMeteo --> DebuterCours: Météo favorable
+    AttenteMeteo --> AnnulerCours: Météo défavorable
+
+    AnnulerCours --> ReplanifierCours
+    ReplanifierCours --> ChoisirCours
+
+    DebuterCours --> [*]
+    Fin --> [*]
+
+    note right of VerifierNiveau
+        Débutant ou confirmé
+    end note
+
+    note right of VerifierPlaces
+        Min 3 personnes
+        Max 10 personnes
+    end note
+
+    note right of AttenteMeteo
+        Vérification 24h avant
+    end note
+
+    note right of AnnulerCours
+        Remboursement ou
+        report possible
+    end note
+@enduml
