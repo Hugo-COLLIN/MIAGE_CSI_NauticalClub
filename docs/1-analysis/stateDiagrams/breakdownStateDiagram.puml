@@ -1,0 +1,11 @@
+@startuml
+    title États d'une panne
+
+    [*] --> Signalee
+    Signalee --> HorsService: declarerHorsService()
+    Signalee --> Reparation: envoyerEnReparation()
+    Reparation --> Repare: reparer()
+    Reparation --> HorsService: declarerHorsService()
+    Repare --> [*]
+    HorsService --> [*]
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title Système de Gestion Nautique - Diagramme de Communication
+allow_mixing
+
+actor ":Client" as Client
+actor ":Moniteur" as Moniteur
+actor ":Propriétaire" as Proprietaire
+object ":Système" as Systeme
+object ":Base de Données" as BDD
+object ":Matériel" as Materiel
+object ":Cours" as Cours
+object ":Forfait" as Forfait
+object ":Camping" as Camping
+object ":Paiement" as Paiement
+
+Client -- Systeme : 1 : S'inscrire
+Client -- Paiement : 2 : Payer
+Client -- Cours : 3 : Réserver
+
+Moniteur -- Systeme : 1 : Authentifier
+Moniteur -- Cours : 2 : Gérer
+Moniteur -- Materiel : 3 : Superviser
+Moniteur -- Forfait : 4 : Consulter
+
+Proprietaire -- Systeme : 1 : Authentifier
+Proprietaire -- Cours : 2 : Gérer
+Proprietaire -- Materiel : 3 : Superviser
+Proprietaire -- BDD : 4 : Consulter historiques
+
+Systeme -- BDD : 1 : Stocker données
+Systeme -- Materiel : 2 : Gérer état
+Systeme -- Cours : 3 : Planifier
+Systeme -- Forfait : 4 : Calculer prix
+Systeme -- Paiement : 5 : Traiter paiement
+
+Materiel -- BDD : 1 : Mettre à jour statut
+Materiel -- Cours : 2 : Affecter aux cours
+
+Forfait -- Camping : 1 : Vérifier partenariat
+Forfait -- Cours : 2 : Associer
+
+Paiement -- Forfait : 1 : Facturer
+Paiement -- BDD : 2 : Enregistrer transaction
+
+Cours -- Materiel : 1 : Utiliser équipement
+Cours -- BDD : 2 : Stocker détails
+@enduml

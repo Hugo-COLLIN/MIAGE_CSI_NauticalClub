@@ -1,0 +1,137 @@
+@startuml
+actor ":Personnel" as Personnel
+actor ":Propriétaire" as Proprietaire
+participant ":Système" as Systeme
+participant ":Base de données" as BDD
+participant ":Matériel" as Materiel
+
+title Gestion des Pannes de Matériel
+
+== Signalement d'une Panne ==
+Personnel -> Systeme : Signaler une panne
+activate Personnel
+activate Systeme
+
+Systeme -> BDD : verifierDetailsMateriel()
+activate BDD
+BDD --> Systeme : informationsMateriel
+note right of BDD : Inclut l'état du matériel et son historique
+
+deactivate BDD
+Systeme -> Materiel : appliquerStatutEnPanne()
+activate Materiel
+Materiel -> BDD : majStatut()
+activate BDD
+BDD --> Materiel : confirmationMaj
+deactivate BDD
+Materiel --> Systeme : confirmationEnPanne
+deactivate Materiel
+
+Systeme -> Systeme : creerNouvellePanne()
+
+Systeme -> BDD : enregistrerDetailsPanne()
+activate BDD
+note right : Inclut commentaires, date, description de la panne
+BDD --> Systeme : confirmationEnregistrement
+
+deactivate BDD
+Systeme --> Personnel : Confirmation de signalement
+
+deactivate Systeme
+
+deactivate Personnel
+
+== Qualification de la Panne ==
+Proprietaire -> Systeme : Evaluer la panne
+activate Proprietaire
+activate Systeme
+
+Systeme -> Materiel : evaluerReparabilite()
+activate Materiel
+Materiel -> BDD : verifierHistoriquePannes
+activate BDD
+BDD --> Materiel : historiquePannes
+note right of BDD : Identifie si la panne est récurrente
+deactivate BDD
+Materiel --> Systeme : evaluationReparabilite
+deactivate Materiel
+Systeme --> Proprietaire : Afficher évaluation
+deactivate Systeme
+
+alt Panne réparable
+    Proprietaire -> Systeme : Décider de réparer
+    activate Systeme
+    Systeme -> Materiel : appliquerStatutReparation()
+    activate Materiel
+    Materiel -> BDD : majStatut()
+    activate BDD
+    BDD --> Materiel : confirmationMaj
+    deactivate BDD
+    Materiel --> Systeme : confirmationReparation
+    deactivate Materiel
+    Systeme --> Proprietaire : confirmation de réparation
+    deactivate Systeme
+
+else Matériel non réparable
+    Proprietaire -> Systeme : Déclarer hors service
+    activate Systeme
+    Systeme -> Materiel : appliquerStatutHorsService()
+    activate Materiel
+    Materiel -> BDD : majStatut()
+    activate BDD
+    BDD --> Materiel : confirmationMaj
+    deactivate BDD
+    Materiel --> Systeme : confirmationHorsService
+    deactivate Materiel
+    Systeme --> Proprietaire : Confirmation de mise hors service
+    deactivate Systeme
+    deactivate Proprietaire
+end
+
+== Résolution de la Panne ==
+Personnel -> Systeme : Marquer la panne réparée
+activate Personnel
+activate Systeme
+
+Systeme -> Materiel : appliquerStatutEnService()
+activate Materiel
+Materiel -> BDD : majStatut()
+activate BDD
+BDD --> Materiel : confirmationMaj
+deactivate BDD
+Materiel --> Systeme : confirmationEnService
+
+deactivate BDD
+
+deactivate Materiel
+Systeme -> BDD : enregistrerDetailsReparation()
+activate BDD
+note right : Coût, date, détails techniques, temps de réparation
+BDD --> Systeme : confirmation
+
+deactivate BDD
+Systeme --> Personnel : confirmation de résolution
+
+deactivate Systeme
+
+deactivate Personnel
+
+== Consultation de l'Historique des Pannes ==
+Proprietaire -> Systeme : Consulter l'historique des pannes
+activate Proprietaire
+activate Systeme
+
+Systeme -> BDD : lireHistoriquePannes()
+activate BDD
+BDD --> Systeme : listePannesParMateriel
+note right of BDD : Filtré par période, état et coûts
+
+deactivate BDD
+Systeme --> Proprietaire : Afficher le rapport détaillé
+note right : Affiche pannes, coûts, durée d'immobilisation
+
+deactivate Systeme
+
+deactivate Proprietaire
+
+@enduml

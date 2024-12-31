@@ -7,60 +7,50 @@ participant ":Système" as App
 participant ":Base de donnees" as DB
 participant ":Matériel" as Mat
 participant ":Cours" as Cour
-participant ":Forfait" as Forf
 participant ":Camping" as Camp
 participant ":Paiement" as Pay
 
-title Inscription à un cours
+title Location de matériel
 
-alt Inscription par le Moniteur
-    M -> App : Inscrire un client à un cours (niveau, forfait choisi)
+alt Réservation par le Moniteur
+    M -> App : Faire la réservation
     activate M
     activate App
-else Inscription par le Propriétaire
-    P -> App : Inscrire un client à un cours (niveau, forfait choisi)
+else Réservation par le Propriétaire
+    P -> App : Faire la réservation
     activate P
 end
 
 activate App
 
-App -> DB : demanderListeCoursDisponibles()
-activate DB
-DB --> App : coursDisponibles
-deactivate DB
-
-alt Inscription par le Moniteur
-    App -> M : Afficher les cours disponibles
-    M -> App : Sélectionner un cours (date, horaire)
-else Inscription par le Propriétaire
-    App -> P : Afficher les cours disponibles
-    P -> App : Sélectionner un cours (date, horaire)
-end
-
-App -> Mat : verifierDisponibiliteMoniteurEtMateriel()
+App -> Mat : demanderListeMaterielsDisponibles()
 activate Mat
-Mat -> DB : verifierStatutMateriel()
+Mat -> DB : requeteListeMaterielsDisponibles()
 activate DB
-DB --> Mat : statutMateriel
+DB --> Mat : materielsDisponibles
 deactivate DB
-Mat --> DB : verifierStatutMoniteur()
-activate DB
-DB --> Mat : statutMoniteur
-deactivate DB
-Mat --> App : disponibiliteMoniteurEtMateriel
+Mat --> App : listeMaterielsDisponibles
 deactivate Mat
 
-App -> Forf : calculerPrixForfait()
-activate Forf
+alt Inscription par le Moniteur
+    App -> M : Afficher les matériels disponibles
+    M -> App : Sélectionner un matériel (date, horaire)
+else Inscription par le Propriétaire
+    App -> P : Afficher les matériels disponibles
+    P -> App : Sélectionner un matériel (date, horaire)
+end
 
-Forf -> Camp : verifierSiCampingPartenaire()
+App -> Mat : calculerPrixReservation()
+activate Mat
+
+Mat -> Camp : verifierSiCampingPartenaire()
 activate Camp
-Camp --> Forf : pourcentageRemise
+Camp --> Mat : pourcentageRemise
 deactivate Camp
-Forf -> Forf : appliquerRemise()
+Mat -> Mat : appliquerRemise()
 
-Forf --> App : montantForfait
-deactivate Forf
+Mat --> App : montantReservation
+deactivate Mat
 
 App -> Pay : initialiserPaiement()
 activate Pay
@@ -79,9 +69,9 @@ end
 
 App -> Mat : enregistrerReservationMateriel()
 activate Mat
-DB -> Mat : reserverMateriel()
+DB <- Mat : reserverMateriel()
 activate DB
-Mat --> DB : confirmationReservationMateriel
+Mat <-- DB : confirmationReservationMateriel
 deactivate DB
 Mat --> App : confirmationEnregistrementReservationMateriel
 deactivate Mat
