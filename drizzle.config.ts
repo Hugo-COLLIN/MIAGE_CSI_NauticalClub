@@ -4,7 +4,7 @@ import 'dotenv/config';
 export default {
   schema: './src/db/schema.ts',
   out: './src/db/migrations',
-  driver: 'pg',
+  dialect: 'postgresql', // Ajoutez cette ligne
   dbCredentials: {
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432'),
