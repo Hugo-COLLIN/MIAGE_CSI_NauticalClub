@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "astro": "^5.1.2",
+    "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.3",
     "postgres": "^3.4.5"
   },
