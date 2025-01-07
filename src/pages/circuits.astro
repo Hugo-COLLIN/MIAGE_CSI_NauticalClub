@@ -1,0 +1,25 @@
+---
+import { db } from '../db';
+
+// Récupération des données depuis la table circuit
+const result = await db.query('SELECT nomcircuit, nb_places FROM circuit');
+const circuits = result.rows;
+---
+
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Liste des circuits</title>
+</head>
+<body>
+<h1>Liste des circuits</h1>
+
+<ul>
+  {circuits.map((circuit) => (
+      <li>
+        {circuit.nomcircuit} - {circuit.nb_places} places
+      </li>
+  ))}
+</ul>
+</body>
+</html>
