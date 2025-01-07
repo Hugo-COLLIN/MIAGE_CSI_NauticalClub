@@ -1,0 +1,7 @@
+---
+import { db } from '../db';
+
+const { rows } = await db.query('SELECT NOW() as "time"');
+---
+
+<time>{rows[0].time}</time>
