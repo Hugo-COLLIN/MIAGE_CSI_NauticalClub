@@ -1,4 +1,18 @@
+-- Database: MIAGE_CSI_NauticalClub
 
+-- DROP DATABASE IF EXISTS "MIAGE_CSI_NauticalClub";
+
+CREATE DATABASE "MIAGE_CSI_NauticalClub"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'French_France.1252'
+    LC_CTYPE = 'French_France.1252'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+	
 -- script creation of enumerations
 
 CREATE TYPE StatutPanne AS ENUM (
