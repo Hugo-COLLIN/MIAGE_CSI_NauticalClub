@@ -1,6 +1,7 @@
 ---
 import {db} from '../db';
 import {checkAuth} from "../middleware/page-auth";
+import AuthButton from "../components/AuthButton.astro";
 
 const user = await checkAuth(Astro);
 if (!user) return Astro.redirect('/login');
@@ -16,6 +17,7 @@ const circuits = result.rows;
   <title>Liste des circuits</title>
 </head>
 <body>
+<AuthButton />
 <h1>Liste des circuits</h1>
 <ul>
   {circuits.map((circuit) => (

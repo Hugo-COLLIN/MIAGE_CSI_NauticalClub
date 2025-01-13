@@ -1,0 +1,37 @@
+---
+const isLoggedIn = Astro.cookies.has('token');
+---
+
+{isLoggedIn ? (
+<button id="logoutButton">Se déconnecter</button>
+  ) : (
+  <a href="/login">Se connecter</a>
+  )}
+
+<script>
+  const logoutButton = document.getElementById('logoutButton');
+
+  if (logoutButton) {
+    logoutButton.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Redirection vers la page de connexion ou la page d'accueil
+          window.location.href = '/';
+        } else {
+          console.error('Erreur lors de la déconnexion');
+        }
+      } catch (error) {
+        console.error('Erreur lors de la déconnexion:', error);
+      }
+    });
+  }
+</script>
