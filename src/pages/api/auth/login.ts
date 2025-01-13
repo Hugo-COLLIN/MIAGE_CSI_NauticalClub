@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     const body = await request.text();
     const data = JSON.parse(body);
@@ -24,8 +24,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     const user = result.rows[0];
 
-    console.log('user', user)
-
     if (!user) {
       return new Response(JSON.stringify({
         error: 'Identifiants incorrects'
@@ -36,7 +34,6 @@ export const POST: APIRoute = async ({ request }) => {
     const validPassword = await bcrypt.compare(mot_de_passe, user.mot_de_passe);
 
     const user_mdp = await bcrypt.hash(user.mot_de_passe, 10);
-    console.log('user_mdp', user_mdp);
 
     if (!validPassword) {
       return new Response(JSON.stringify({
@@ -52,8 +49,17 @@ export const POST: APIRoute = async ({ request }) => {
       { expiresIn: '24h' }
     );
 
+    // Stocker le token dans un cookie HTTP-only
+    cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 60 * 60 * 24 // 24 heures
+    });
+
     return new Response(JSON.stringify({
-      token,
+      success: true,
       user: {
         identifiant: user.identifiant,
       }
