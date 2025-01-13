@@ -1,0 +1,91 @@
+---
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion</title>
+  <style>
+      .login-form {
+          max-width: 400px;
+          margin: 50px auto;
+          padding: 20px;
+          border: 1px solid #ccc;
+      }
+      .form-group {
+          margin-bottom: 15px;
+      }
+      input {
+          width: 100%;
+          padding: 8px;
+          margin-top: 5px;
+      }
+      button {
+          width: 100%;
+          padding: 10px;
+          background: #007bff;
+          color: white;
+          border: none;
+          cursor: pointer;
+      }
+      .error {
+          color: red;
+          margin-top: 10px;
+      }
+  </style>
+</head>
+<body>
+<div class="login-form">
+  <h2>Connexion</h2>
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="login">Identifiant</label>
+      <input type="text" id="login" name="login" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Se connecter</button>
+    <div id="error" class="error"></div>
+  </form>
+  <div class="login-link" style="margin-top: 15px; text-align: center;">
+    <a href="/signup">Pas encore de compte ? S'inscrire</a>
+  </div>
+</div>
+
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const identifiant = document.getElementById('login').value;
+    const mot_de_passe = document.getElementById('password').value;
+    const errorDiv = document.getElementById('error');
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ identifiant, mot_de_passe }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Stocker le token
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        // Rediriger vers la page d'accueil
+        window.location.href = '/';
+      } else {
+        errorDiv.textContent = data.error || 'Erreur de connexion';
+      }
+    } catch (error) {
+      errorDiv.textContent = 'Erreur de connexion au serveur';
+    }
+  });
+</script>
+</body>
+</html>

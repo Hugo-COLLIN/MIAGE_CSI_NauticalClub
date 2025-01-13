@@ -10,10 +10,14 @@
   },
   "dependencies": {
     "astro": "^5.1.2",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/pg": "^8.11.10",
     "pg": "^8.13.1",
     "typescript": "^5.7.2"

@@ -1,0 +1,122 @@
+---
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Création de compte</title>
+  <style>
+      .signup-form {
+          max-width: 400px;
+          margin: 50px auto;
+          padding: 20px;
+          border: 1px solid #ccc;
+      }
+      .form-group {
+          margin-bottom: 15px;
+      }
+      input {
+          width: 100%;
+          padding: 8px;
+          margin-top: 5px;
+      }
+      button {
+          width: 100%;
+          padding: 10px;
+          background: #007bff;
+          color: white;
+          border: none;
+          cursor: pointer;
+      }
+      .error {
+          color: red;
+          margin-top: 10px;
+      }
+      .success {
+          color: green;
+          margin-top: 10px;
+      }
+      .login-link {
+          margin-top: 15px;
+          text-align: center;
+      }
+  </style>
+</head>
+<body>
+<div class="signup-form">
+  <h2>Création de compte</h2>
+  <form id="signupForm">
+    <div class="form-group">
+      <label for="identifiant">Identifiant</label>
+      <input type="text" id="identifiant" name="identifiant" required>
+    </div>
+    <div class="form-group">
+      <label for="mot_de_passe">Mot de passe</label>
+      <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+    </div>
+    <div class="form-group">
+      <label for="confirm_password">Confirmer le mot de passe</label>
+      <input type="password" id="confirm_password" name="confirm_password" required>
+    </div>
+    <button type="submit">Créer le compte</button>
+    <div id="error" class="error"></div>
+    <div id="success" class="success"></div>
+  </form>
+  <div class="login-link">
+    <a href="/login">Déjà un compte ? Se connecter</a>
+  </div>
+</div>
+
+<script>
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const identifiant = document.getElementById('identifiant').value;
+    const mot_de_passe = document.getElementById('mot_de_passe').value;
+    const confirm_password = document.getElementById('confirm_password').value;
+    const errorDiv = document.getElementById('error');
+    const successDiv = document.getElementById('success');
+
+    // Réinitialiser les messages
+    errorDiv.textContent = '';
+    successDiv.textContent = '';
+
+    // Validation côté client
+    if (mot_de_passe !== confirm_password) {
+      errorDiv.textContent = 'Les mots de passe ne correspondent pas';
+      return;
+    }
+
+    if (mot_de_passe.length < 6) {
+      errorDiv.textContent = 'Le mot de passe doit contenir au moins 6 caractères';
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ identifiant, mot_de_passe }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        successDiv.textContent = 'Compte créé avec succès !';
+        // Redirection vers la page de connexion après 2 secondes
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
+      } else {
+        errorDiv.textContent = data.error || 'Erreur lors de la création du compte';
+      }
+    } catch (error) {
+      errorDiv.textContent = 'Erreur de connexion au serveur';
+    }
+  });
+</script>
+</body>
+</html>
