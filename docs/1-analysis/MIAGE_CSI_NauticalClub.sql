@@ -12,7 +12,7 @@ CREATE DATABASE "MIAGE_CSI_NauticalClub"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
-	
+
 -- script creation of enumerations
 
 CREATE TYPE StatutPanne AS ENUM (
@@ -42,7 +42,7 @@ CREATE TYPE statut AS ENUM (
 -- script creation of tables
 
 CREATE TABLE ArchiveMateriel (
-	id_archive_materiel SERIAL PRIMARY KEY,
+	id_materiel SERIAL PRIMARY KEY,
 	type_materiel type_materiel NOT NULL,
 	caracteristiques VARCHAR(50),
 	etat StatutMateriel NOT NULL,
@@ -51,21 +51,21 @@ CREATE TABLE ArchiveMateriel (
 );
 
 CREATE TABLE ArchiveSaison (
-	id_archive_saison SERIAL PRIMARY KEY,
+	id_saison SERIAL PRIMARY KEY,
 	date_debut DATE NOT NULL,
 	date_fin DATE NOT NULL
 );
 
 CREATE TABLE ArchivePanne (
-	id_archive_panne SERIAL PRIMARY KEY,
-	id_archive_materiel INT NOT NULL,
-	id_archive_saison INT NOT NULL,
+	id_panne SERIAL PRIMARY KEY,
+	id_materiel INT NOT NULL,
+	id_saison INT NOT NULL,
 	date_panne TIMESTAMP NOT NULL,
 	date_reparation DATE,
 	cout_reparation FLOAT CHECK(cout_reparation>=0),
 	description TEXT,
-	FOREIGN KEY (id_archive_materiel) REFERENCES ArchiveMateriel (id_archive_materiel),
-	FOREIGN KEY (id_archive_saison) REFERENCES ArchiveSaison (id_archive_saison)
+	FOREIGN KEY (id_materiel) REFERENCES ArchiveMateriel (id_materiel),
+	FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison)
 );
 
 CREATE TABLE Saison (
@@ -91,9 +91,9 @@ CREATE TABLE Personnel (
 );
 
 CREATE TABLE ArchiveEmbauche (
-	id_archive_saison INT NOT NULL,
+	id_saison INT NOT NULL,
 	id_personnel INT NOT NULL,
-	FOREIGN KEY (id_archive_saison) REFERENCES ArchiveSaison (id_archive_saison),
+	FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison),
 	FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel)
 );
 
@@ -182,10 +182,10 @@ CREATE TABLE Cours (
 	id_saison INT NOT NULL,
 	id_forfait INT NOT NULL,
 	id_personnel INT NOT NULL,
-	id_archive_saison INT NOT NULL,
+	id_saison INT NOT NULL,
 	FOREIGN KEY (id_saison) REFERENCES Saison (id_saison),
 	FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel),
-	FOREIGN KEY (id_archive_saison) REFERENCES ArchiveSaison (id_archive_saison),
+	FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison),
 	FOREIGN KEY (id_forfait) REFERENCES Forfait (id_forfait)
 );
  
@@ -197,14 +197,14 @@ CREATE TABLE est_utilisé_pour (
 );
 
 CREATE TABLE ArchivePaiement (
-	id_archive_paiement SERIAL PRIMARY KEY,
+	id_paiement SERIAL PRIMARY KEY,
 	date_paiement DATE NOT NULL,
 	montant FLOAT NOT NULL,
 	type_paiement VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE ArchiveCours (
-	id_archive_cours SERIAL PRIMARY KEY,
+	id_cours SERIAL PRIMARY KEY,
 	date_cours DATE NOT NULL,
 	heure_debut TIME NOT NULL,
 	niveau niveau NOT NULL,
@@ -212,23 +212,23 @@ CREATE TABLE ArchiveCours (
 	statut statut NOT NULL,
 	capacite_max INT NOT NULL,
 	id_personnel INT NOT NULL,
-	id_archive_saison INT NOT NULL,
+	id_saison INT NOT NULL,
 	FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel),
-	FOREIGN KEY (id_archive_saison) REFERENCES ArchiveSaison (id_archive_saison)
+	FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison)
 );
 	
 CREATE TABLE ArchiveForfait (
-	id_archive_forfait SERIAL PRIMARY KEY,
+	id_forfait SERIAL PRIMARY KEY,
 	type_forfait type_forfait NOT NULL,
 	prix FLOAT NOT NULL,
 	date_achat DATE NOT NULL,
 	date_expiration DATE NOT NULL,
 	seances_restantes INT NOT NULL,
-	id_archive_cours INT NOT NULL,
-	id_archive_paiement INT NOT NULL,
+	id_cours INT NOT NULL,
+	id_paiement INT NOT NULL,
 	id_client INT NOT NULL,
-	FOREIGN KEY (id_archive_cours) REFERENCES ArchiveCours (id_archive_cours),
-	FOREIGN KEY (id_archive_paiement) REFERENCES ArchivePaiement (id_archive_paiement),
+	FOREIGN KEY (id_cours) REFERENCES ArchiveCours (id_cours),
+	FOREIGN KEY (id_paiement) REFERENCES ArchivePaiement (id_paiement),
 	FOREIGN KEY (id_client) REFERENCES Client (id_client)
 );
 
@@ -250,15 +250,15 @@ CREATE TABLE Location (
 );
 
 CREATE TABLE ArchiveLocation (
-	id_archive_location SERIAL PRIMARY KEY,
+	id_location SERIAL PRIMARY KEY,
 	date_debut TIMESTAMP NOT NULL,
 	date_fin_prevue TIMESTAMP NOT NULL,
 	date_retour TIMESTAMP NOT NULL,
 	prix_base FLOAT NOT NULL,
 	supplements FLOAT DEFAULT 0,
-	id_archive_saison INT NOT NULL,
 	id_saison INT NOT NULL,
-	FOREIGN KEY (id_archive_saison) REFERENCES ArchiveSaison (id_archive_saison),
+	id_saison INT NOT NULL,
+	FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison),
 	FOREIGN KEY (id_saison) REFERENCES Saison (id_saison)
 );
 

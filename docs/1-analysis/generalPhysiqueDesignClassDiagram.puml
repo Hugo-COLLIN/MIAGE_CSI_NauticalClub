@@ -15,7 +15,7 @@
     }
 
     class ArchiveEmbauche {
-        id_archive_saison : int <<PK>> <<FK>>
+        id_saison : int <<PK>> <<FK>>
         id_personnel : int <<PK>> <<FK>>
     }
 
@@ -31,7 +31,7 @@
     }
 
     class ArchiveSaison {
-        id_archive_saison : int <<PK>>
+        id_saison : int <<PK>>
         date_debut : date
         date_fin : date
     }
@@ -62,7 +62,7 @@
     }
 
     class ArchiveMateriel {
-        id_archive_materiel : int <<PK>>
+        id_materiel : int <<PK>>
         type_materiel : type_materiel
         caracteristiques : varChar
         etat : StatutMateriel
@@ -83,14 +83,14 @@
     }
 
     class ArchiveForfait {
-        id_archive_forfait : int
+        id_forfait : int
         type_forfait : type_forfait
         prix : float
         date_achat : date
         date_expiration : date
         seances_restantes : int
-        id_archive_cours : int <<FK>>
-        id_archive_paiement : int <<FK>>
+        id_cours : int <<FK>>
+        id_paiement : int <<FK>>
         id_client : <<FK>>
     }
 
@@ -123,11 +123,11 @@
         id_saison : int <<FK>>
         id_forfait : int <<FK>>
         id_personnel : int <<FK>>
-        id_archive_saison : <<FK>>
+        id_saison : <<FK>>
     }
 
     class ArchiveCours {
-        id_archive_cours : int <<PK>>
+        id_cours : int <<PK>>
         date_cours : date
         heure_debut : time
         niveau : niveau
@@ -135,7 +135,7 @@
         statut : statut
         capacite_max : int
         id_personnel : int <<FK>>
-        id_archive_saison : int <<FK>>
+        id_saison : int <<FK>>
     }
 
     class Location {
@@ -152,13 +152,13 @@
     }
 
     class ArchiveLocation {
-        id_archive_location : int <<PK>>
+        id_location : int <<PK>>
         date_debut : timestamp
         date_fin_prevue : timestamp
         date_retour : timestamp
         prix_base : float
         supplements : float
-        id_archive_saison : int <<FK>>
+        id_saison : int <<FK>>
         id_saison : int <<FK>>
     }
 
@@ -173,13 +173,13 @@
     }
 
     class ArchivePanne {
-        id_archive_panne : int <<PK>>
+        id_panne : int <<PK>>
         date_panne : timestamp
         date_reparation : date
         cout_reparation : float
         description : text
-        id_archive_saison : int <<FK>>
-        id_archive_materiel : int <<FK>>
+        id_saison : int <<FK>>
+        id_materiel : int <<FK>>
     }
 
     class Stock {
@@ -195,7 +195,7 @@
     }
 
     class ArchivePaiement {
-        id_archive_paiement : int <<PK>>
+        id_paiement : int <<PK>>
         date_paiement : date
         montant : float
         type_paiement : varChar

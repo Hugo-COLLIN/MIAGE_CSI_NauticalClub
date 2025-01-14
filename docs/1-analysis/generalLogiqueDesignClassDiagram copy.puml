@@ -20,7 +20,7 @@
     }
 
     class ArchiveSaison {
-        id_archive_saison : int
+        id_saison : int
         date_debut : date
         date_fin : date
     }
@@ -44,7 +44,7 @@
     }
 
     class ArchiveMateriel {
-        id_archive_materiel : int
+        id_materiel : int
         type_materiel : type_materiel
         caracteristiques : varChar
         etat : StatutMateriel
@@ -62,7 +62,7 @@
     }
 
     class ArchiveForfait {
-        id_archive_forfait : int
+        id_forfait : int
         type_forfait : type_forfait
         prix : float
         date_achat : date
@@ -99,7 +99,7 @@
     }
 
     class ArchiveCours {
-        id_archive_cours : int
+        id_cours : int
         date_cours : int
         heure_debut : time
         niveau : niveau
@@ -118,7 +118,7 @@
     }
 
     class ArchiveLocation {
-        id_archive_location : int
+        id_location : int
         date_debut : timestamp
         date_fin_prevue : timestamp
         date_retour : timestamp
@@ -135,7 +135,7 @@
     }
 
     class ArchivePanne {
-        id_archive_panne : int 
+        id_panne : int 
         date_panne : timestamp
         date_reparation : date
         cout_reparation : float
@@ -155,7 +155,7 @@
     }
 
     class ArchivePaiement {
-        id_archive_paiement : int
+        id_paiement : int
         date_paiement : date
         montant : float
         type_paiement : varChar
@@ -232,12 +232,12 @@
     Paiement ||..|{ Forfait: payé pour
     Saison }|..|{ Personnel: embauche
     Saison ||..o{ Cours: a lieu pendant
-    Saison ||..o{ Location: a lieu pendant
-    Saison ||..o{ Panne: a lieu pendant
+    Saison ||.o{ Location: a lieu pendant
+    Saison ||.o{ Panne: a lieu pendant
     Saison ||..o{ ArchiveLocation: a lieu pendant
     ArchiveSaison }|..|{ Personnel: embauche
     ArchiveSaison ||..o{ Cours: a lieu pendant
-    ArchiveSaison ||..o{ ArchivePanne: a lieu pendant
+    ArchiveSaison ||.o{ ArchivePanne: a lieu pendant
     ArchiveSaison ||..o{ ArchiveCours: a lieu pendant
     ArchiveSaison ||..o{ ArchiveLocation: a lieu pendant
     ArchivePaiement ||..o{ ArchiveForfait: payé pour
