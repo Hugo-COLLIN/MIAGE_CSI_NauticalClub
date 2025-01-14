@@ -230,13 +230,13 @@
         Voile
         Pied_mat
     }
-	
+
     enum type_forfait {
         1_seance
         2_seances
         5_seances
     }
-	
+
     enum niveau {
         debutant
         confirme
@@ -253,7 +253,7 @@
         Moniteur
         Proprietaire
     }
-	
+
 
     Client ||..o{ Forfait: possède
     Client ||..o{ Location: effectue
@@ -272,7 +272,7 @@
     Materiel ||..|{ est_utilisé_pour
     est_utilisé_pour }|..|| Cours
     Paiement ||..|{ Forfait: payé pour
-    Saison ||...|{ Embauche
+    Saison ||....|{ Embauche
     Embauche }|..||Personnel
     Saison ||..o{ Cours: a lieu pendant
     Saison ||..o{ Location: a lieu pendant
