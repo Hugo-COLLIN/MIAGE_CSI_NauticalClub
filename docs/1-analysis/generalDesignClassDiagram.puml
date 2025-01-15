@@ -201,7 +201,7 @@
     ArchiveForfait "1" -- "0..*" Client: possède
     Partenaire "1" -- "1..*" Forfait: vend
     Camping "1" -- "1..*" Client: accueille
-    Materiel "1" - "1" Cours: est utilisé pour
+    Materiel "1..*" - "1..*" Cours: est utilisé pour
     Paiement "1" -- "1..*" Forfait: payé pour
     Saison "1..*" -- "2..*" Personnel: embauche
     Saison "1" -- "0..*" Cours: a lieu pendant

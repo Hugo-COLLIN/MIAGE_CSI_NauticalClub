@@ -1,0 +1,245 @@
+@startuml
+    class Personnel {
+        id_personnel : int
+        nom : varChar
+        prenom : varChar
+        email : varChar
+        telephone : int
+        est_diplome : boolean
+        permis_bateau : boolean
+        specialite : varChar
+        date_embauche : date
+        tarif_horaire : float
+        niveau_experimente : boolean
+    }
+
+    class Saison {
+        id_saison : int
+        date_debut : date
+        date_fin : date
+    }
+
+    class ArchiveSaison {
+        id_saison : int
+        date_debut : date
+        date_fin : date
+    }
+
+    class Client {
+        id_client : int
+        nom : varChar
+        prenom : varChar
+        email : varChar
+        telephone : int
+        piece_identite : varChar
+    }
+
+    class Materiel {
+        id_materiel : int
+        type_materiel : type_materiel
+        caracteristiques : varChar
+        etat : StatutMateriel
+        date_acquisition : date
+        numero_serie : varChar
+    }
+
+    class ArchiveMateriel {
+        id_materiel : int
+        type_materiel : type_materiel
+        caracteristiques : varChar
+        etat : StatutMateriel
+        date_acquisition : date
+        numero_serie : varChar
+    }
+
+    class Forfait {
+        id_forfait : int
+        type_forfait : type_forfait
+        prix : float
+        date_achat : date
+        date_expiration : date
+        seances_restantes : int
+    }
+
+    class ArchiveForfait {
+        id_forfait : int
+        type_forfait : type_forfait
+        prix : float
+        date_achat : date
+        date_expiration : date
+        seances_restantes : int
+    }
+
+    class Partenaire {
+        id_partenaire : int
+        nom : varChar
+        adresse : varChar
+        email : varChar
+        telephone : int
+        type_partenaire : varChar
+        est_actif : boolean
+    }
+
+    class Camping {
+        id_camping : int
+        nom : varChar
+        adresse : varChar
+        email : varChar
+        telephone : int
+    }
+
+    class Cours {
+        id_cours : int
+        date_cours : date
+        heure_debut : time
+        niveau : niveau
+        nb_inscrits : int
+        statut : statut
+        capacite_max : int
+    }
+
+    class ArchiveCours {
+        id_cours : int
+        date_cours : int
+        heure_debut : time
+        niveau : niveau
+        nb_inscrits : int
+        statut : statut
+        capacite_max : int
+    }
+
+    class Location {
+        id_location : int
+        date_debut : timestamp
+        date_fin_prevue : timestamp
+        date_retour : timestamp
+        prix_base : float
+        supplements : float
+    }
+
+    class ArchiveLocation {
+        id_location : int
+        date_debut : timestamp
+        date_fin_prevue : timestamp
+        date_retour : timestamp
+        prix_base : float
+        supplements : float
+    }
+
+    class Panne {
+        id_panne : int
+        date_panne : timestamp
+        date_reparation : date
+        cout_reparation : float
+        description : text
+    }
+
+    class ArchivePanne {
+        id_panne : int
+        date_panne : timestamp
+        date_reparation : date
+        cout_reparation : float
+        description : text
+    }
+
+    class Stock {
+        id_stock : int
+        quantite : int
+    }
+
+    class Paiement {
+        id_paiement : int
+        date_paiement : date
+        montant : float
+        type_paiement : varChar
+    }
+
+    class ArchivePaiement {
+        id_paiement : int
+        date_paiement : date
+        montant : float
+        type_paiement : varChar
+    }
+
+    class Compte {
+	    identifiant : varChar
+	    mot_de_passe : varChar
+    }
+
+    enum StatutPanne {
+        Signalee
+        Reparation
+        Reparee
+        HorsService
+    }
+
+    enum StatutMateriel {
+        Recu
+        EnService
+        EnPanne
+        AuRebut
+    }
+
+    enum type_materiel {
+        Catamaran
+        Pedalo
+        Paddle
+        Planche
+        Voile
+        Pied_mat
+    }
+
+    enum type_forfait {
+        1_seance
+        2_seances
+        5_seances
+    }
+
+    enum niveau {
+        debutant
+        confirme
+    }
+
+    enum statut {
+        prevu
+        confirme
+        annule
+    }
+
+    enum type_personnel {
+        GarçonDePlage
+        Moniteur
+        Proprietaire
+    }
+
+
+    Client ||..o{ Forfait: possède
+    Client ||..o{ Location: effectue
+    Personnel ||..o{ Cours: anime
+    Materiel ||..o{ Location: est loué dans
+    Forfait ||..o{ Cours: utilisé pour
+    Personnel ||..o{ Location: supervise
+    Materiel ||..o{ Panne: peut tomber en panne
+    ArchiveMateriel ||..o{ ArchivePanne: peut tomber en panne
+    Materiel }o...|| Stock: est stocké dans
+    ArchiveCours ||..o{ ArchiveForfait: utilisé pour
+    Personnel ||...o{ ArchiveCours : anime
+    ArchiveForfait }o..|| Client: possède
+    Partenaire ||..|{ Forfait: vend
+    Camping ||..|{ Client: accueille
+    Materiel }|.|{ Cours: est utilisé pour
+    Paiement ||..|{ Forfait: payé pour
+    Saison }|..|{ Personnel: embauche
+    Saison ||..o{ Cours: a lieu pendant
+    Saison ||.o{ Location: a lieu pendant
+    Saison ||.o{ Panne: a lieu pendant
+    Saison ||..o{ ArchiveLocation: a lieu pendant
+    ArchiveSaison }|..|{ Personnel: embauche
+    ArchiveSaison ||..o{ Cours: a lieu pendant
+    ArchiveSaison ||.o{ ArchivePanne: a lieu pendant
+    ArchiveSaison ||..o{ ArchiveCours: a lieu pendant
+    ArchiveSaison ||..o{ ArchiveLocation: a lieu pendant
+    ArchivePaiement ||..o{ ArchiveForfait: payé pour
+    Personnel ||..|| Compte
+
+@enduml

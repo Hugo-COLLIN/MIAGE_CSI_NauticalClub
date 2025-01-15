@@ -1,0 +1,289 @@
+@startuml
+    class Personnel {
+        id_personnel : int  <<PK>>
+        nom : varChar
+        prenom : varChar
+        email : varChar
+        telephone : int
+        est_diplome : boolean
+        permis_bateau : boolean
+        specialite : varChar
+        date_embauche : date
+        tarif_horaire : float
+        niveau_experimente : boolean
+        id_saison : int <<FK>>
+    }
+
+    class ArchiveEmbauche {
+        id_saison : int <<PK>> <<FK>>
+        id_personnel : int <<PK>> <<FK>>
+    }
+
+    class Embauche {
+        id_saison : int <<PK>> <<FK>>
+        id_personnel : int <<PK>> <<FK>>
+    }
+
+    class Saison {
+        id_saison : int <<PK>>
+        date_debut : date
+        date_fin : date
+    }
+
+    class ArchiveSaison {
+        id_saison : int <<PK>>
+        date_debut : date
+        date_fin : date
+    }
+
+    class Client {
+        id_client : int <<PK>>
+        nom : varChar
+        prenom : varChar
+        email : varChar
+        telephone : int
+        piece_identite : varChar
+        id_camping : int <<FK>>
+    }
+
+    class Materiel {
+        id_materiel : int <<PK>>
+        type_materiel : type_materiel
+        caracteristiques : varChar
+        etat : StatutMateriel
+        date_acquisition : date
+        numero_serie : varChar
+        id_stock : int  <<FK>>
+    }
+
+    class est_utilisé_pour {
+        id_materiel : int <<PK>> <<FK>>
+        id_cours : <<PK>> <<FK>>
+    }
+
+    class ArchiveMateriel {
+        id_materiel : int <<PK>>
+        type_materiel : type_materiel
+        caracteristiques : varChar
+        etat : StatutMateriel
+        date_acquisition : date
+        numero_serie : varChar
+    }
+
+    class Forfait {
+        id_forfait : int <<PK>>
+        type_forfait : type_forfait
+        prix : float
+        date_achat : date
+        date_expiration : date
+        seances_restantes : int
+        id_partenaire : int <<FK>>
+        id_paiement : int <<FK>>
+        id_client : <<FK>>
+    }
+
+    class ArchiveForfait {
+        id_forfait : int
+        type_forfait : type_forfait
+        prix : float
+        date_achat : date
+        date_expiration : date
+        seances_restantes : int
+        id_cours : int <<FK>>
+        id_paiement : int <<FK>>
+        id_client : <<FK>>
+    }
+
+    class Partenaire {
+        id_partenaire : int <<PK>>
+        nom : varChar
+        adresse : varChar
+        email : varChar
+        telephone : int
+        type_partenaire : varChar
+        est_actif : boolean
+    }
+
+    class Camping {
+        id_camping : int <<PK>>
+        nom : varChar
+        adresse : varChar
+        email : varChar
+        telephone : int
+    }
+
+    class Cours {
+        id_cours : int <<PK>>
+        date_cours : date
+        heure_debut : time
+        niveau : niveau
+        nb_inscrits : int
+        statut : statut
+        capacite_max : int
+        id_saison : int <<FK>>
+        id_forfait : int <<FK>>
+        id_personnel : int <<FK>>
+        id_saison : <<FK>>
+    }
+
+    class ArchiveCours {
+        id_cours : int <<PK>>
+        date_cours : date
+        heure_debut : time
+        niveau : niveau
+        nb_inscrits : int
+        statut : statut
+        capacite_max : int
+        id_personnel : int <<FK>>
+        id_saison : int <<FK>>
+    }
+
+    class Location {
+        id_location : int <<PK>>
+        date_debut : timestamp
+        date_fin_prevue : timestamp
+        date_retour : timestamp
+        prix_base : float
+        supplements : float
+        id_client : int <<FK>>
+        id_personnel : int <<FK>>
+        id_saison : int <<FK>>
+        id_materiel : int <<FK>>
+    }
+
+    class ArchiveLocation {
+        id_location : int <<PK>>
+        date_debut : timestamp
+        date_fin_prevue : timestamp
+        date_retour : timestamp
+        prix_base : float
+        supplements : float
+        id_saison : int <<FK>>
+        id_saison : int <<FK>>
+    }
+
+    class Panne {
+        id_panne : int <<PK>>
+        date_panne : timestamp
+        date_reparation : date
+        cout_reparation : float
+        description : text
+        id_materiel : int <<FK>>
+        id_saison : int <<FK>>
+    }
+
+    class ArchivePanne {
+        id_panne : int <<PK>>
+        date_panne : timestamp
+        date_reparation : date
+        cout_reparation : float
+        description : text
+        id_saison : int <<FK>>
+        id_materiel : int <<FK>>
+    }
+
+    class Stock {
+        id_stock : int <<PK>>
+        quantite : int
+    }
+
+    class Paiement {
+        id_paiement : int <<PK>>
+        date_paiement : date
+        montant : float
+        type_paiement : varChar
+    }
+
+    class ArchivePaiement {
+        id_paiement : int <<PK>>
+        date_paiement : date
+        montant : float
+        type_paiement : varChar
+    }
+
+    class Compte {
+	    identifiant : varChar
+	    mot_de_passe : varChar
+        id_personnel : int <<FK>>
+    }
+
+    enum StatutPanne {
+        Signalee
+        Reparation
+        Reparee
+        HorsService
+    }
+
+    enum StatutMateriel {
+        Recu
+        EnService
+        EnPanne
+        AuRebut
+    }
+
+    enum type_materiel {
+        Catamaran
+        Pedalo
+        Paddle
+        Planche
+        Voile
+        Pied_mat
+    }
+
+    enum type_forfait {
+        1_seance
+        2_seances
+        5_seances
+    }
+
+    enum niveau {
+        debutant
+        confirme
+    }
+
+    enum statut {
+        prevu
+        confirme
+        annule
+    }
+
+    enum type_personnel {
+        GarçonDePlage
+        Moniteur
+        Proprietaire
+    }
+
+
+    Client ||..o{ Forfait: possède
+    Client ||..o{ Location: effectue
+    Personnel ||..o{ Cours: anime
+    Materiel ||..o{ Location: est loué dans
+    Forfait ||..o{ Cours: utilisé pour
+    Personnel ||..o{ Location: supervise
+    Materiel ||..o{ Panne: peut tomber en panne
+    ArchiveMateriel ||..o{ ArchivePanne: peut tomber en panne
+    Materiel }o...|| Stock: est stocké dans
+    ArchiveCours ||..o{ ArchiveForfait: utilisé pour
+    Personnel ||...o{ ArchiveCours : anime
+    ArchiveForfait }o..|| Client: possède
+    Partenaire ||..|{ Forfait: vend
+    Camping ||..|{ Client: accueille
+    Materiel ||..|{ est_utilisé_pour
+    est_utilisé_pour }|..|| Cours
+    Paiement ||..|{ Forfait: payé pour
+    Saison ||....|{ Embauche
+    Embauche }|..||Personnel
+    Saison ||..o{ Cours: a lieu pendant
+    Saison ||..o{ Location: a lieu pendant
+    Saison ||..o{ Panne: a lieu pendant
+    Saison ||..o{ ArchiveLocation: a lieu pendant
+    ArchiveSaison ||...|{ ArchiveEmbauche
+    ArchiveEmbauche }|..||Personnel
+    ArchiveSaison ||..o{ Cours: a lieu pendant
+    ArchiveSaison ||..o{ ArchivePanne: a lieu pendant
+    ArchiveSaison ||..o{ ArchiveCours: a lieu pendant
+    ArchiveSaison ||..o{ ArchiveLocation: a lieu pendant
+    ArchivePaiement ||..o{ ArchiveForfait: payé pour
+    Personnel ||..|| Compte
+
+@enduml
