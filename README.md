@@ -13,8 +13,9 @@ DB_PORT=5432
 DB_NAME=NAME_OF_YOUR_DATABASE
 DB_USER=YOUR_USERNAME
 DB_PASSWORD=YOUR_PASSWORD
+JWT_SECRET=YOUR_LONG_RANDOM_STRING
 ```
-Replace `NAME_OF_YOUR_DATABASE`, `YOUR_USERNAME` and `YOUR_PASSWORD` with the appropriate values.
+Replace `NAME_OF_YOUR_DATABASE`, `YOUR_USERNAME`, `YOUR_PASSWORD` AND `YOUR_LONG_RANDOM_STRING` with the appropriate values.
 
 4. Run `npm run dev` to start the project
 5. Open your browser and go to `http://localhost:4321`

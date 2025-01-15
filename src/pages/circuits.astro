@@ -1,5 +1,10 @@
 ---
-import { db } from '../db';
+import {db} from '../db';
+import {checkAuth} from "../middleware/page-auth";
+import AuthButton from "../components/AuthButton.astro";
+
+const user = await checkAuth(Astro);
+if (!user) return Astro.redirect('/login');
 
 // Récupération des données depuis la table circuit
 const result = await db.query('SELECT nomcircuit, nb_places FROM circuit');
@@ -8,12 +13,12 @@ const circuits = result.rows;
 
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <title>Liste des circuits</title>
 </head>
 <body>
+<AuthButton />
 <h1>Liste des circuits</h1>
-
 <ul>
   {circuits.map((circuit) => (
       <li>
