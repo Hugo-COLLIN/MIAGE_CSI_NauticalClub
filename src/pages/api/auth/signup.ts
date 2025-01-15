@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
     // Validation des données
     if (!data.nom || !data.prenom || !data.email || !data.telephone ||
       data.tarif_horaire === undefined || !data.id_saison ||
-      !data.login || !data.mot_de_passe) {
+      !data.identifiant || !data.mot_de_passe) {
       return new Response(JSON.stringify({
         error: 'Tous les champs obligatoires doivent être remplis'
       }), { status: 400 });
@@ -18,11 +18,11 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Vérifier si l'email ou l'identifiant existent déjà
     const existingUser = await db.query(
-      `SELECT p.email, c.login 
+      `SELECT p.email, c.identifiant 
        FROM Personnel p 
-       LEFT JOIN Compte c ON c.login = $1 
+       LEFT JOIN Compte c ON c.identifiant = $1 
        WHERE p.email = $2`,
-      [data.login, data.email]
+      [data.identifiant, data.email]
     );
 
     if (existingUser.rows.length > 0) {
@@ -31,9 +31,9 @@ export const POST: APIRoute = async ({ request }) => {
           error: 'Cet email est déjà utilisé'
         }), { status: 400 });
       }
-      if (existingUser.rows[0].login === data.login) {
+      if (existingUser.rows[0].identifiant === data.identifiant) {
         return new Response(JSON.stringify({
-          error: 'Ce login est déjà utilisé'
+          error: 'Cet identifiant est déjà utilisé'
         }), { status: 400 });
       }
     }
@@ -69,9 +69,9 @@ export const POST: APIRoute = async ({ request }) => {
 
       // Insérer le compte avec hachage côté PostgreSQL
       await client.query(
-        `INSERT INTO Compte (login, mot_de_passe, id_personnel)
+        `INSERT INTO Compte (identifiant, mot_de_passe, id_personnel)
          VALUES ($1, crypt($2, gen_salt('bf')), $3)`,
-        [data.login, data.mot_de_passe, id_personnel]
+        [data.identifiant, data.mot_de_passe, id_personnel]
       );
 
       await client.query('COMMIT');
