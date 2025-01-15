@@ -202,8 +202,7 @@
     }
 
     class Compte {
-	    id_compte SERIAL : int <<PK>>
-	    login : varChar
+	    identifiant : varChar
 	    mot_de_passe : varChar
         id_personnel : int <<FK>>
     }

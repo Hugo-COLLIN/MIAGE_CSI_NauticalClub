@@ -135,7 +135,7 @@
     }
 
     class ArchivePanne {
-        id_panne : int 
+        id_panne : int
         date_panne : timestamp
         date_reparation : date
         cout_reparation : float
@@ -162,8 +162,7 @@
     }
 
     class Compte {
-	    id_compte SERIAL : int
-	    login : varChar
+	    identifiant : varChar
 	    mot_de_passe : varChar
     }
 
@@ -189,13 +188,13 @@
         Voile
         Pied_mat
     }
-	
+
     enum type_forfait {
         1_seance
         2_seances
         5_seances
     }
-	
+
     enum niveau {
         debutant
         confirme
@@ -212,7 +211,7 @@
         Moniteur
         Proprietaire
     }
-	
+
 
     Client ||..o{ Forfait: possède
     Client ||..o{ Location: effectue
@@ -241,6 +240,6 @@
     ArchiveSaison ||..o{ ArchiveCours: a lieu pendant
     ArchiveSaison ||..o{ ArchiveLocation: a lieu pendant
     ArchivePaiement ||..o{ ArchiveForfait: payé pour
-    Personnel ||..|| Compte 
+    Personnel ||..|| Compte
 
 @enduml
