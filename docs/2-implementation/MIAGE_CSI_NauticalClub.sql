@@ -323,7 +323,7 @@ CREATE TABLE Panne
 
 CREATE TABLE Compte
 (
-    login        VARCHAR(30),
+    identifiant        VARCHAR(30),
     mot_de_passe VARCHAR(60),
     id_personnel INT NOT NULL,
     FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel)
