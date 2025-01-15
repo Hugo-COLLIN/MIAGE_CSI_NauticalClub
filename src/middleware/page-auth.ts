@@ -21,20 +21,3 @@ export async function checkAuth(Astro: any) {
     return null;
   }
 }
-
-export async function ensureAuth(Astro: any) {
-  const user = await checkAuth(Astro);
-  if (!user) {
-    return Astro.redirect('/login');
-  }
-  return user;
-}
-
-export async function requireAuth(Astro: any, redirectTo = '/login') {
-  const user = await checkAuth(Astro); // Assurez-vous que checkAuth est correctement importé
-  if (!user) {
-    Astro.redirect(redirectTo); // Effectue la redirection
-    return null; // Arrête l'exécution du reste du code
-  }
-  return user; // Retourne l'utilisateur authentifié si présent
-}
