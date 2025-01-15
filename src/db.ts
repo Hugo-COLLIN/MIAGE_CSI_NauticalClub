@@ -3,9 +3,7 @@ import pg from 'pg';
 // Make sure we DO NOT "prerender" this function to allow the ENV variables to update on the fly
 export const prerender = false;
 
-console.log(import.meta.env.DB_HOST);
-
-const client = new pg.Client({
+const pool = new pg.Pool({
   host: import.meta.env.DB_HOST,
   port: import.meta.env.DB_PORT,
   database: import.meta.env.DB_NAME,
@@ -13,6 +11,4 @@ const client = new pg.Client({
   password: import.meta.env.DB_PASSWORD,
 });
 
-await client.connect()
-
-export { client as db };
+export { pool as db };
