@@ -1,4 +1,3 @@
-// api/clients.ts
 import type { APIRoute } from 'astro';
 import { db } from '../../db';
 
