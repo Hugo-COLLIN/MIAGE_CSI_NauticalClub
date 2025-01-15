@@ -7,7 +7,6 @@ WITH OWNER = postgres
     ENCODING = 'UTF8'
     LC_COLLATE = 'French_France.1252'
     LC_CTYPE = 'French_France.1252'
-    LOCALE_PROVIDER = 'libc'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
@@ -304,7 +303,6 @@ CREATE TABLE ArchiveLocation
     date_retour     TIMESTAMP NOT NULL,
     prix_base       FLOAT     NOT NULL,
     supplements     FLOAT DEFAULT 0,
-    id_saison       INT       NOT NULL,
     id_saison       INT       NOT NULL,
     FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison),
     FOREIGN KEY (id_saison) REFERENCES Saison (id_saison)
