@@ -163,12 +163,26 @@
           <td>${client.piece_identite || '-'}</td>
           <td>${client.id_camping || '-'}</td>
           <td>
-              <button onclick="editClient(${client.id_client})" class="btn btn-warning">Modifier</button>
-              <button onclick="deleteClient(${client.id_client})" class="btn btn-danger">Supprimer</button>
+              <button data-id="${client.id_client}" class="btn btn-warning edit-btn">Modifier</button>
+              <button data-id="${client.id_client}" class="btn btn-danger delete-btn">Supprimer</button>
           </td>
       </tr>
     `).join('');
+
+    // Ajouter les écouteurs d'événements après avoir rendu le tableau
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        editClient(parseInt(this.dataset.id));
+      });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        deleteClient(parseInt(this.dataset.id));
+      });
+    });
   }
+
 
   // Éditer un client
   function editClient(id) {
