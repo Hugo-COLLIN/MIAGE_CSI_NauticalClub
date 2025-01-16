@@ -97,9 +97,8 @@
                id="telephone"
                name="telephone"
                required
-               pattern="[0-9]{10}"
-               title="Le numéro de téléphone doit contenir 10 chiffres"
-               placeholder="0123456789">
+               title="Format: 0XXXXXXXXX ou +XXX... (format international)"
+               placeholder="0XXXXXXXXX ou +XXX...">
       </div>
       <div class="form-group">
         <label for="piece_identite">Pièce d'identité</label>
@@ -220,14 +219,11 @@
   clientForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const telephone = document.getElementById('telephone').value;
-    console.log(telephone);
-
     const formData = {
       nom: document.getElementById('nom').value,
       prenom: document.getElementById('prenom').value,
       email: document.getElementById('email').value,
-      telephone: parseInt(telephone), // Convertir en nombre
+      telephone: document.getElementById('telephone').value,
       piece_identite: document.getElementById('piece_identite').value || null,
       id_camping: document.getElementById('id_camping').value || null
     };
