@@ -1,0 +1,231 @@
+---
+import type { CRUDProps } from '../types';
+
+interface Props extends CRUDProps {}
+
+const { apiUrl, fields, title, idField, columns } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <style>
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+      }
+      .form-container {
+          margin-bottom: 30px;
+          padding: 20px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+      }
+      .form-group {
+          margin-bottom: 15px;
+      }
+      .form-group label {
+          display: block;
+          margin-bottom: 5px;
+      }
+      .form-group input {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
+      .data-table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      .data-table th, .data-table td {
+          padding: 10px;
+          border: 1px solid #ddd;
+          text-align: left;
+      }
+      .data-table th {
+          background-color: #f5f5f5;
+      }
+      .btn {
+          padding: 8px 15px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+      .btn-primary {
+          background-color: #007bff;
+          color: white;
+      }
+      .btn-danger {
+          background-color: #dc3545;
+          color: white;
+      }
+      .btn-warning {
+          background-color: #ffc107;
+          color: black;
+      }
+      .error {
+          color: red;
+          margin-top: 10px;
+      }
+      .success {
+          color: green;
+          margin-top: 10px;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>{title}</h1>
+
+  <div class="form-container">
+    <h2>Ajouter/Modifier</h2>
+    <form id="dataForm">
+      <input type="hidden" id="itemId">
+      {fields.map(field => (
+          <div class="form-group">
+            <label for={field.name}>{field.label}</label>
+            <input
+                type={field.type}
+                id={field.name}
+                name={field.name}
+                required={field.required}
+                maxlength={field.maxLength}
+                title={field.title}
+                placeholder={field.placeholder}
+            />
+          </div>
+      ))}
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+      <div id="formError" class="error"></div>
+      <div id="formSuccess" class="success"></div>
+    </form>
+  </div>
+
+  <div class="list-container">
+    <h2>Liste des éléments</h2>
+    <table class="data-table">
+      <thead>
+      <tr>
+        {columns.map(column => (
+            <th>{column}</th>
+        ))}
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="dataTableBody">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script define:vars={{ apiUrl, fields, idField }}>
+  let items = [];
+  const dataForm = document.getElementById('dataForm');
+  const dataTableBody = document.getElementById('dataTableBody');
+
+  async function loadItems() {
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      items = data;
+      renderTable();
+    } catch (error) {
+      console.error('Erreur lors du chargement:', error);
+    }
+  }
+
+  function renderTable() {
+    dataTableBody.innerHTML = items.map(item => `
+      <tr>
+        ${fields.map(field => `<td>${item[field.name] || '-'}</td>`).join('')}
+        <td>
+          <button data-id="${item[idField]}" class="btn btn-warning edit-btn">Modifier</button>
+          <button data-id="${item[idField]}" class="btn btn-danger delete-btn">Supprimer</button>
+        </td>
+      </tr>
+    `).join('');
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', () => editItem(button.dataset.id));
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', () => deleteItem(button.dataset.id));
+    });
+  }
+
+  function editItem(id) {
+    const item = items.find(i => i[idField] === parseInt(id));
+    if (item) {
+      document.getElementById('itemId').value = item[idField];
+      fields.forEach(field => {
+        document.getElementById(field.name).value = item[field.name] || '';
+      });
+    }
+  }
+
+  async function deleteItem(id) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+      try {
+        const response = await fetch(`${apiUrl}/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          await loadItems();
+        } else {
+          alert('Erreur lors de la suppression');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    }
+  }
+
+  dataForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = {};
+    fields.forEach(field => {
+      const value = document.getElementById(field.name).value;
+      formData[field.name] = value || null;
+    });
+
+    const itemId = document.getElementById('itemId').value;
+    const method = itemId ? 'PUT' : 'POST';
+    const url = itemId ? `${apiUrl}/${itemId}` : apiUrl;
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        document.getElementById('formSuccess').textContent = 'Enregistré avec succès';
+        dataForm.reset();
+        document.getElementById('itemId').value = '';
+        await loadItems();
+        setTimeout(() => {
+          document.getElementById('formSuccess').textContent = '';
+        }, 3000);
+      } else {
+        const error = await response.json();
+        document.getElementById('formError').textContent = error.error || 'Erreur lors de l\'enregistrement';
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      document.getElementById('formError').textContent = 'Erreur de connexion au serveur';
+    }
+  });
+
+  loadItems();
+</script>
+</body>
+</html>
