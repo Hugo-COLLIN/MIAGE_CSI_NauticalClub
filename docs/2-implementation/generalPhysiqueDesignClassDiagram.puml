@@ -4,7 +4,7 @@
         nom : varChar
         prenom : varChar
         email : varChar
-        telephone : int
+        telephone : varChar
         est_diplome : boolean
         permis_bateau : boolean
         specialite : varChar
@@ -41,7 +41,7 @@
         nom : varChar
         prenom : varChar
         email : varChar
-        telephone : int
+        telephone : varChar
         piece_identite : varChar
         id_camping : int <<FK>>
     }
@@ -99,7 +99,7 @@
         nom : varChar
         adresse : varChar
         email : varChar
-        telephone : int
+        telephone : varChar
         type_partenaire : varChar
         est_actif : boolean
     }
@@ -109,7 +109,7 @@
         nom : varChar
         adresse : varChar
         email : varChar
-        telephone : int
+        telephone : varChar
     }
 
     class Cours {
