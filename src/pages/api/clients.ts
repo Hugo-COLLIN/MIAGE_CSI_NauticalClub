@@ -27,19 +27,12 @@ export const POST: APIRoute = async ({ request }) => {
     const data = await request.json();
 
     // Validation des données
-    console.log(data)
+    // console.log(data)
     if (!data.nom || !data.prenom || !data.email || !data.telephone) {
       return new Response(JSON.stringify({
         error: 'Tous les champs obligatoires doivent être remplis'
       }), { status: 400 });
     }
-
-    // Validation du format du téléphone
-    // if (!/^[0-9]{10}$/.test(data.telephone.toString())) {
-    //   return new Response(JSON.stringify({
-    //     error: 'Le numéro de téléphone doit contenir exactement 10 chiffres'
-    //   }), { status: 400 });
-    // }
 
     const result = await db.query(
       `INSERT INTO Client (nom, prenom, email, telephone, piece_identite, id_camping)
