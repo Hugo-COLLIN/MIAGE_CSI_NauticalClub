@@ -111,7 +111,7 @@ CREATE TABLE Personnel
     nom                VARCHAR(30) NOT NULL,
     prenom             VARCHAR(30) NOT NULL,
     email              VARCHAR(50) NOT NULL,
-    telephone          INT         NOT NULL,
+    telephone          VARCHAR(20) NOT NULL,
     est_diplome        BOOLEAN,
     permis_bateau      BOOLEAN,
     specialite         VARCHAR(50),
@@ -144,7 +144,7 @@ CREATE TABLE Camping
     nom        VARCHAR(50) NOT NULL,
     adresse    VARCHAR(50) NOT NULL,
     email      VARCHAR(50) NOT NULL,
-    telephone  INT         NOT NULL
+    telephone  VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE Client
@@ -153,7 +153,7 @@ CREATE TABLE Client
     nom            VARCHAR(30) NOT NULL,
     prenom         VARCHAR(30) NOT NULL,
     email          VARCHAR(50) NOT NULL,
-    telephone      INT         NOT NULL,
+    telephone      VARCHAR(20) NOT NULL,
     piece_identite VARCHAR(50),
     id_camping     INT,
     FOREIGN KEY (id_camping) REFERENCES Camping (id_camping)
@@ -191,7 +191,7 @@ CREATE TABLE Partenaire
     nom             VARCHAR(50) NOT NULL,
     adresse         VARCHAR(50) NOT NULL,
     email           VARCHAR(50) NOT NULL,
-    telephone       INT         NOT NULL,
+    telephone       VARCHAR(20) NOT NULL,
     type_partenaire VARCHAR(50) NOT NULL,
     est_actif       BOOLEAN
 );
