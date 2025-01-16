@@ -88,15 +88,31 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
       {fields.map(field => (
           <div class="form-group">
             <label for={field.name}>{field.label}</label>
-            <input
-                type={field.type}
-                id={field.name}
-                name={field.name}
-                required={field.required}
-                maxlength={field.maxLength}
-                title={field.title}
-                placeholder={field.placeholder}
-            />
+            {field.type === 'select' ? (
+                <select
+                    id={field.name}
+                    name={field.name}
+                    required={field.required}
+                >
+                  <option value="">Sélectionnez...</option>
+                  {field.options?.map(option => (
+                      <option value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+            ) : (
+                <input
+                    type={field.type}
+                    id={field.name}
+                    name={field.name}
+                    required={field.required}
+                    maxlength={field.maxLength}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    min={field.min}
+                    max={field.max}
+                    value={field.defaultValue || ''}
+                />
+            )}
           </div>
       ))}
       <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -138,10 +154,18 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
     }
   }
 
+  function getDisplayValue(field, value) {
+    if (field.type === 'select') {
+      const option = field.options?.find(opt => opt.value === value);
+      return option ? option.label : value;
+    }
+    return value;
+  }
+
   function renderTable() {
     dataTableBody.innerHTML = items.map(item => `
       <tr>
-        ${fields.map(field => `<td>${item[field.name] || '-'}</td>`).join('')}
+        ${fields.map(field => `<td>${getDisplayValue(field, item[field.name]) || '-'}</td>`).join('')}
         <td>
           <button data-id="${item[idField]}" class="btn btn-warning edit-btn">Modifier</button>
           <button data-id="${item[idField]}" class="btn btn-danger delete-btn">Supprimer</button>
@@ -163,7 +187,10 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
     if (item) {
       document.getElementById('itemId').value = item[idField];
       fields.forEach(field => {
-        document.getElementById(field.name).value = item[field.name] || '';
+        const element = document.getElementById(field.name);
+        if (element) {
+          element.value = item[field.name] || '';
+        }
       });
     }
   }
