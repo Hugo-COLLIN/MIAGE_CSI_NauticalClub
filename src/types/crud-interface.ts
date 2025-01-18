@@ -6,6 +6,11 @@ export interface Field {
   maxLength?: number;
   title?: string;
   placeholder?: string;
+  options?: { value: string; label: string }[];
+  min?: number;
+  max?: number;
+  defaultValue?: string;
+  step?: number;
 }
 
 export interface CRUDProps {

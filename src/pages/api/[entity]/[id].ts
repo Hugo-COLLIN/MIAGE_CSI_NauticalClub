@@ -6,7 +6,8 @@ export const prerender = false;
 
 export const PUT: APIRoute = async ({ request, params }) => {
   try {
-    const { entity, id } = params;
+    const entity: string = params.entity as string;
+    const id = params.id;
     const config = TABLES_CONFIG[entity];
 
     if (!config) {
@@ -38,7 +39,7 @@ export const PUT: APIRoute = async ({ request, params }) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erreur:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
@@ -49,7 +50,8 @@ export const PUT: APIRoute = async ({ request, params }) => {
 
 export const DELETE: APIRoute = async ({ params }) => {
   try {
-    const { entity, id } = params;
+    const entity: string = params.entity as string;
+    const id = params.id;
     const config = TABLES_CONFIG[entity];
 
     if (!config) {
@@ -77,7 +79,7 @@ export const DELETE: APIRoute = async ({ params }) => {
     }
 
     return new Response(null, { status: 204 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erreur:', error);
     return new Response(
       JSON.stringify({ error: error.message }),

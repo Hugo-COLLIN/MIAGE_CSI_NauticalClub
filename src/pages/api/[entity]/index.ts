@@ -6,7 +6,7 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
   try {
-    const entity = params.entity;
+    const entity = params.entity as string;
     const config = TABLES_CONFIG[entity];
 
     if (!config) {
@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ params }) => {
 
 export const POST: APIRoute = async ({ request, params }) => {
   try {
-    const entity = params.entity;
+    const entity = params.entity as string;
     const config = TABLES_CONFIG[entity];
 
     if (!config) {
@@ -52,7 +52,7 @@ export const POST: APIRoute = async ({ request, params }) => {
       status: 201,
       headers: { 'Content-Type': 'application/json' }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erreur:', error);
     const status = error.name === 'ValidationError' ? 400 : 500;
     return new Response(
