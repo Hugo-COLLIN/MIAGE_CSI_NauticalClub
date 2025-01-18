@@ -47,15 +47,20 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'caracteristiques',
       'etat',
       'date_acquisition',
-      'numero_serie',
-      'quantite'
+      'numero_serie'
     ],
     joinedInsert: {
       table: 'Stock',
       fields: ['quantite'],
       returnField: 'id_stock',
       targetField: 'id_stock'
+    },
+    joinedSelect: {
+      table: 'Stock',
+      fields: ['quantite'],
+      joinField: 'id_stock'
     }
   }
+
   // Add more tables here
 };
