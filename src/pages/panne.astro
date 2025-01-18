@@ -1,0 +1,74 @@
+---
+import CRUDView from '../components/CRUDView.astro';
+
+const fields = [
+  {
+    name: 'date_panne',
+    label: 'Date de la panne',
+    type: 'datetime-local',
+    required: true
+  },
+  {
+    name: 'date_reparation',
+    label: 'Date de réparation',
+    type: 'date'
+  },
+  {
+    name: 'cout_reparation',
+    label: 'Coût de réparation',
+    type: 'number',
+    min: 0,
+    step: '0.01'
+  },
+  {
+    name: 'description',
+    label: 'Description',
+    type: 'textarea'
+  },
+{
+    name: 'id_materiel',
+    label: 'Matériel',
+    type: 'number',
+    required: true
+  },
+  {
+    name: 'id_saison',
+    label: 'Saison',
+    type: 'number',
+    required: true
+  }
+  // {
+  //   name: 'id_materiel',
+  //   label: 'Matériel',
+  //   type: 'select',
+  //   required: true,
+  //   options: [], // À remplir dynamiquement avec les matériels disponibles
+  //   optionsUrl: '/api/materiel'
+  // },
+  // {
+  //   name: 'id_saison',
+  //   label: 'Saison',
+  //   type: 'select',
+  //   required: true,
+  //   options: [], // À remplir dynamiquement avec les saisons disponibles
+  //   optionsUrl: '/api/saison'
+  // }
+];
+
+const columns = [
+  'Date panne',
+  'Date réparation',
+  'Coût réparation',
+  'Description',
+  'Matériel',
+  'Saison'
+];
+---
+
+<CRUDView
+    apiUrl="/api/panne"
+    fields={fields}
+    title="Gestion des Pannes"
+    idField="id_panne"
+    columns={columns}
+/>

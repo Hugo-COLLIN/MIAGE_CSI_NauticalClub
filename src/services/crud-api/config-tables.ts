@@ -85,6 +85,59 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'id_saison',
       'id_materiel'
     ]
+  },
+  forfait: {
+    tableName: 'Forfait',
+    idColumn: 'id_forfait',
+    requiredFields: [
+      'type_forfait',
+      'prix',
+      'date_achat',
+      'date_expiration',
+      'seances_restantes',
+      'id_client',
+      'date_paiement',
+      'montant',
+      'type_paiement'
+    ],
+    allowedFields: [
+      'type_forfait',
+      'prix',
+      'date_achat',
+      'date_expiration',
+      'seances_restantes',
+      'id_partenaire',
+      'id_paiement',
+      'id_client'
+    ],
+    joinedInsert: {
+      table: 'Paiement',
+      fields: ['date_paiement', 'montant', 'type_paiement'],
+      returnField: 'id_paiement',
+      targetField: 'id_paiement'
+    },
+    joinedSelect: {
+      table: 'Paiement',
+      fields: ['date_paiement', 'montant', 'type_paiement'],
+      joinField: 'id_paiement'
+    }
+  },
+  panne: {
+    tableName: 'Panne',
+    idColumn: 'id_panne',
+    requiredFields: [
+      'date_panne',
+      'id_materiel',
+      'id_saison'
+    ],
+    allowedFields: [
+      'date_panne',
+      'date_reparation',
+      'cout_reparation',
+      'description',
+      'id_materiel',
+      'id_saison'
+    ]
   }
   // Add more tables here
 };

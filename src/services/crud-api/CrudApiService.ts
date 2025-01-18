@@ -78,22 +78,33 @@ export class CrudApiService {
     if (this.config.joinedInsert) {
       const { table, fields, returnField, targetField } = this.config.joinedInsert;
 
+      // Créer l'objet de données pour la table jointe
       const joinData: DatabaseRecord = {};
       fields.forEach(field => {
-        joinData[field] = sanitizedData[field];
-        delete sanitizedData[field];
+        if (data[field] !== undefined) {  // Vérifie si la donnée existe
+          joinData[field] = data[field];
+          delete sanitizedData[field];  // Retire le champ des données principales
+        }
       });
 
-      const joinQuery = this.buildInsertQuery(joinData, table);
-      const joinResult = await db.query(joinQuery.text + ` RETURNING ${returnField}`, joinQuery.values);
-
-      sanitizedData[targetField] = joinResult.rows[0][returnField];
+      // Vérifier que toutes les données requises pour la table jointe sont présentes
+      if (Object.keys(joinData).length === fields.length) {
+        const joinQuery = this.buildInsertQuery(joinData, table);
+        const joinResult = await db.query(
+          joinQuery.text + ` RETURNING ${returnField}`,
+          joinQuery.values
+        );
+        sanitizedData[targetField] = joinResult.rows[0][returnField];
+      } else {
+        throw new Error('Données manquantes pour la table jointe');
+      }
     }
 
     const { text, values } = this.buildInsertQuery(sanitizedData);
-    const result = await db.query(text, values);
+    const result = await db.query(text + ' RETURNING *', values);
     return result.rows[0];
   }
+
 
   async update(id: string | number, data: DatabaseRecord) {
     const sanitizedData = sanitizeData(data, this.config.allowedFields);
