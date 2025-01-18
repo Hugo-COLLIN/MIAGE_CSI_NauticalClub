@@ -204,7 +204,7 @@ CREATE TABLE Forfait
     date_achat        DATE         NOT NULL,
     date_expiration   DATE         NOT NULL,
     seances_restantes INT          NOT NULL,
-    id_partenaire     INT          NOT NULL,
+    id_partenaire     INT,
     id_paiement       INT          NOT NULL,
     id_client         INT          NOT NULL,
     FOREIGN KEY (id_partenaire) REFERENCES Partenaire (id_partenaire),
@@ -226,7 +226,6 @@ CREATE TABLE Cours
     id_personnel INT    NOT NULL,
     FOREIGN KEY (id_saison) REFERENCES Saison (id_saison),
     FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel),
-    FOREIGN KEY (id_saison) REFERENCES ArchiveSaison (id_saison),
     FOREIGN KEY (id_forfait) REFERENCES Forfait (id_forfait)
 );
 

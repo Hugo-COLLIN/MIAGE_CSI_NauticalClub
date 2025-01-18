@@ -182,6 +182,12 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
     });
   }
 
+  function formatDateForInput(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+  }
+
   function editItem(id) {
     const item = items.find(i => i[idField] === parseInt(id));
     if (item) {
@@ -189,7 +195,11 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
       fields.forEach(field => {
         const element = document.getElementById(field.name);
         if (element) {
-          element.value = item[field.name] || '';
+          if (field.type === 'date') {
+            element.value = formatDateForInput(item[field.name]);
+          } else {
+            element.value = item[field.name] || '';
+          }
         }
       });
     }

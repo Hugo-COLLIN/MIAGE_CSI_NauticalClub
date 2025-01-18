@@ -1,0 +1,95 @@
+---
+import CRUDView from '../components/CRUDView.astro';
+
+const fields = [
+  {
+    name: 'date_cours',
+    label: 'Date du cours',
+    type: 'date',
+    required: true
+  },
+  {
+    name: 'heure_debut',
+    label: 'Heure de début',
+    type: 'time',
+    required: true
+  },
+  {
+    name: 'niveau',
+    label: 'Niveau',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'debutant', label: 'Débutant' },
+      { value: 'intermediaire', label: 'Intermédiaire' },
+      { value: 'avance', label: 'Avancé' }
+    ]
+  },
+  {
+    name: 'nb_inscrits',
+    label: "Nombre d'inscrits",
+    type: 'number',
+    required: true,
+    min: 0,
+    max: 10
+  },
+  {
+    name: 'statut',
+    label: 'Statut',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'prevu', label: 'Prévu' },
+      { value: 'confirme', label: 'Confirmé' },
+      { value: 'annule', label: 'Annulé' }
+    ]
+  },
+  {
+    name: 'capacite_max',
+    label: 'Capacité maximale',
+    type: 'number',
+    required: true,
+    min: 3,
+    max: 10,
+    defaultValue: 10
+  },
+  {
+    name: 'id_saison',
+    label: 'Saison',
+    type: 'number',
+    required: true
+  },
+  {
+    name: 'id_forfait',
+    label: 'Forfait',
+    type: 'number',
+    required: true
+  },
+  {
+    name: 'id_personnel',
+    label: 'Moniteur',
+    type: 'number',
+    required: true
+  }
+];
+
+const columns = [
+  'Date',
+  'Heure',
+  'Niveau',
+  'Inscrits',
+  'Statut',
+  'Capacité',
+  'Saison',
+  'Forfait',
+  'Moniteur'
+];
+---
+
+<CRUDView
+    apiUrl="/api/cours"
+    fields={fields}
+    title="Gestion des Cours"
+    idField="id_cours"
+    columns={columns}
+/>

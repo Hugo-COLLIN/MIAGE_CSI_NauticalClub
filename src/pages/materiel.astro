@@ -1,0 +1,74 @@
+---
+import CRUDView from '../components/CRUDView.astro';
+
+const fields = [
+  {
+    name: 'type_materiel',
+    label: 'Type de matériel',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'Catamaran', label: 'Catamaran' },
+      { value: 'Pedalo', label: 'Pédalo' },
+      { value: 'Paddle', label: 'Paddle' },
+      { value: 'Planche', label: 'Planche' },
+      { value: 'Voile', label: 'Voile' },
+      { value: 'Pied_mat', label: 'Pied de mât' }
+    ]
+  },
+  {
+    name: 'caracteristiques',
+    label: 'Caractéristiques',
+    type: 'text',
+    maxLength: 50
+  },
+  {
+    name: 'etat',
+    label: 'État',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'Recu', label: 'Reçu' },
+      { value: 'EnService', label: 'En service' },
+      { value: 'EnPanne', label: 'En panne' },
+      { value: 'AuRebut', label: 'Au rebut' }
+    ]
+  },
+  {
+    name: 'date_acquisition',
+    label: "Date d'acquisition",
+    type: 'date',
+    required: true
+  },
+  {
+    name: 'numero_serie',
+    label: 'Numéro de série',
+    type: 'text',
+    maxLength: 50
+  },
+  {
+    name: 'quantite',
+    label: 'Quantité',
+    type: 'number',
+    required: true,
+    min: 1
+  }
+];
+
+const columns = [
+  'Type',
+  'Caractéristiques',
+  'État',
+  'Date acquisition',
+  'N° série',
+  'Quantité'
+];
+---
+
+<CRUDView
+    apiUrl="/api/materiel"
+    fields={fields}
+    title="Gestion du Matériel"
+    idField="id_materiel"
+    columns={columns}
+/>
