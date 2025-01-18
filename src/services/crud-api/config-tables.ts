@@ -121,6 +121,23 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       fields: ['date_paiement', 'montant', 'type_paiement'],
       joinField: 'id_paiement'
     }
+  },
+  panne: {
+    tableName: 'Panne',
+    idColumn: 'id_panne',
+    requiredFields: [
+      'date_panne',
+      'id_materiel',
+      'id_saison'
+    ],
+    allowedFields: [
+      'date_panne',
+      'date_reparation',
+      'cout_reparation',
+      'description',
+      'id_materiel',
+      'id_saison'
+    ]
   }
   // Add more tables here
 };
