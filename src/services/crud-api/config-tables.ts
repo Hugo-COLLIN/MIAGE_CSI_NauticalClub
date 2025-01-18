@@ -95,7 +95,10 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'date_achat',
       'date_expiration',
       'seances_restantes',
-      'id_client'
+      'id_client',
+      'date_paiement',
+      'montant',
+      'type_paiement'
     ],
     allowedFields: [
       'type_forfait',
@@ -104,6 +107,7 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'date_expiration',
       'seances_restantes',
       'id_partenaire',
+      'id_paiement',
       'id_client'
     ],
     joinedInsert: {
@@ -118,6 +122,5 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       joinField: 'id_paiement'
     }
   }
-
   // Add more tables here
 };
