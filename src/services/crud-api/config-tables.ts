@@ -85,6 +85,29 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'id_saison',
       'id_materiel'
     ]
+  },
+  forfaits: {
+    tableName: 'Forfait',
+    idColumn: 'id_forfait',
+    requiredFields: [
+      'type_forfait',
+      'prix',
+      'date_achat',
+      'date_expiration',
+      'seances_restantes',
+      'id_paiement',
+      'id_client'
+    ],
+    allowedFields: [
+      'type_forfait',
+      'prix',
+      'date_achat',
+      'date_expiration',
+      'seances_restantes',
+      'id_partenaire',
+      'id_paiement',
+      'id_client'
+    ]
   }
   // Add more tables here
 };
