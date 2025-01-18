@@ -253,6 +253,7 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
 
   dataForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    document.getElementById('formError').textContent = '';
 
     const formData = {};
     fields.forEach(field => {
