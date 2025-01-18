@@ -14,4 +14,9 @@ export interface TableConfig {
     returnField: string;
     targetField: string;
   };
+  joinedSelect?: {
+    table: string;
+    fields: string[];
+    joinField: string;
+  };
 }

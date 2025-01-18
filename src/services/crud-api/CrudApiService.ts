@@ -42,19 +42,31 @@ export class CrudApiService {
   }
 
   async getAll(orderBy?: string) {
-    const query = `
-      SELECT * FROM ${this.config.tableName}
-      ${orderBy ? `ORDER BY ${orderBy}` : ''}
-    `;
+    let query = `SELECT a.*, ${this.getJoinedSelectFields()} FROM ${this.config.tableName} a`;
+
+    if (this.config.joinedSelect) {
+      const { table, joinField } = this.config.joinedSelect;
+      query += ` LEFT JOIN ${table} b ON a.${joinField} = b.${joinField}`;
+    }
+
+    if (orderBy) {
+      query += ` ORDER BY ${orderBy}`;
+    }
+
     const result = await db.query(query);
     return result.rows;
   }
 
   async getById(id: string | number) {
-    const query = `
-      SELECT * FROM ${this.config.tableName}
-      WHERE ${this.config.idColumn} = $1
-    `;
+    let query = `SELECT a.*, ${this.getJoinedSelectFields()} FROM ${this.config.tableName} a`;
+
+    if (this.config.joinedSelect) {
+      const { table, joinField } = this.config.joinedSelect;
+      query += ` LEFT JOIN ${table} b ON a.${joinField} = b.${joinField}`;
+    }
+
+    query += ` WHERE a.${this.config.idColumn} = $1`;
+
     const result = await db.query(query, [id]);
     return result.rows[0];
   }
@@ -85,6 +97,17 @@ export class CrudApiService {
 
   async update(id: string | number, data: DatabaseRecord) {
     const sanitizedData = sanitizeData(data, this.config.allowedFields);
+
+    if (this.config.joinedSelect && data.quantite) {
+      const { table, joinField } = this.config.joinedSelect;
+      await db.query(
+        `UPDATE ${table} SET quantite = $1 WHERE ${joinField} = (
+          SELECT ${joinField} FROM ${this.config.tableName} WHERE ${this.config.idColumn} = $2
+        )`,
+        [data.quantite, id]
+      );
+    }
+
     const { text, values } = this.buildUpdateQuery(id, sanitizedData);
     const result = await db.query(text, values);
     return result.rows[0];
@@ -97,5 +120,10 @@ export class CrudApiService {
     `;
     const result = await db.query(query, [id]);
     return result.rowCount > 0;
+  }
+
+  private getJoinedSelectFields(): string {
+    if (!this.config.joinedSelect) return '';
+    return this.config.joinedSelect.fields.map(field => `b.${field}`).join(', ');
   }
 }
