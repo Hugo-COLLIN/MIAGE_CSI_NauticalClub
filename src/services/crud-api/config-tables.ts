@@ -40,7 +40,7 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'type_materiel',
       'etat',
       'date_acquisition',
-      'id_stock'
+      'quantite'
     ],
     allowedFields: [
       'type_materiel',
@@ -48,8 +48,14 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'etat',
       'date_acquisition',
       'numero_serie',
-      'id_stock'
-    ]
+      'quantite'
+    ],
+    joinedInsert: {
+      table: 'Stock',
+      fields: ['quantite'],
+      returnField: 'id_stock',
+      targetField: 'id_stock'
+    }
   }
   // Add more tables here
 };

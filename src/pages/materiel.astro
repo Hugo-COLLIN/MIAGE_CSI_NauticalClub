@@ -47,10 +47,11 @@ const fields = [
     maxLength: 50
   },
   {
-    name: 'id_stock',
-    label: 'Stock',
+    name: 'quantite',
+    label: 'Quantité',
     type: 'number',
-    required: true
+    required: true,
+    min: 1
   }
 ];
 
@@ -60,7 +61,7 @@ const columns = [
   'État',
   'Date acquisition',
   'N° série',
-  'Stock'
+  'Quantité'
 ];
 ---
 
