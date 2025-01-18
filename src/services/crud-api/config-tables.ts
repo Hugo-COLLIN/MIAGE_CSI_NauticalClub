@@ -32,6 +32,24 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'id_forfait',
       'id_personnel'
     ]
+  },
+  materiel: {
+    tableName: 'Materiel',
+    idColumn: 'id_materiel',
+    requiredFields: [
+      'type_materiel',
+      'etat',
+      'date_acquisition',
+      'id_stock'
+    ],
+    allowedFields: [
+      'type_materiel',
+      'caracteristiques',
+      'etat',
+      'date_acquisition',
+      'numero_serie',
+      'id_stock'
+    ]
   }
   // Add more tables here
 };
