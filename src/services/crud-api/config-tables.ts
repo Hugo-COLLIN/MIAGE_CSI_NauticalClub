@@ -60,7 +60,31 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       fields: ['quantite'],
       joinField: 'id_stock'
     }
+  },
+  locations: {
+    tableName: 'Location',
+    idColumn: 'id_location',
+    requiredFields: [
+      'date_debut',
+      'date_fin_prevue',
+      'date_retour',
+      'prix_base',
+      'id_client',
+      'id_personnel',
+      'id_saison',
+      'id_materiel'
+    ],
+    allowedFields: [
+      'date_debut',
+      'date_fin_prevue',
+      'date_retour',
+      'prix_base',
+      'supplements',
+      'id_client',
+      'id_personnel',
+      'id_saison',
+      'id_materiel'
+    ]
   }
-
   // Add more tables here
 };
