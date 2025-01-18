@@ -23,13 +23,13 @@ const fields = [
   },
   {
     name: 'date_achat',
-    label: 'Date d\'achat',
+    label: "Date d'achat",
     type: 'date',
     required: true
   },
   {
     name: 'date_expiration',
-    label: 'Date d\'expiration',
+    label: "Date d'expiration",
     type: 'date',
     required: true
   },
@@ -41,21 +41,64 @@ const fields = [
     min: 0
   },
   {
-    name: 'id_partenaire',
-    label: 'Partenaire',
-    type: 'number'
-  },
-  {
-    name: 'id_paiement',
-    label: 'Paiement',
-    type: 'number',
-    required: true
-  },
-  {
     name: 'id_client',
     label: 'Client',
     type: 'number',
     required: true
+  },
+  // {
+  //   name: 'id_client',
+  //   label: 'Client',
+  //   type: 'select',
+  //   required: true,
+  //   options: [],
+  //   dynamicOptions: {
+  //     url: '/api/clients',
+  //     labelKey: 'nom',
+  //     valueKey: 'id_client'
+  //   }
+  // },
+  {
+    name: 'id_partenaire',
+    label: 'Partenaire',
+    type: 'number'
+  },
+  // {
+  //   name: 'id_partenaire',
+  //   label: 'Partenaire',
+  //   type: 'select',
+  //   options: [],
+  //   dynamicOptions: {
+  //     url: '/api/partenaires',
+  //     labelKey: 'nom',
+  //     valueKey: 'id_partenaire'
+  //   }
+  // },
+  {
+    name: 'date_paiement',
+    label: 'Date de paiement',
+    type: 'date',
+    required: true
+  },
+  {
+    name: 'montant',
+    label: 'Montant du paiement',
+    type: 'number',
+    required: true,
+    min: 0,
+    step: '0.01'
+  },
+  {
+    name: 'type_paiement',
+    label: 'Type de paiement',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'CB', label: 'Carte bancaire' },
+      { value: 'Especes', label: 'Espèces' },
+      { value: 'Cheque', label: 'Chèque' },
+      { value: 'Virement', label: 'Virement' }
+    ]
   }
 ];
 
@@ -65,14 +108,16 @@ const columns = [
   'Date achat',
   'Date expiration',
   'Séances restantes',
+  'Client',
   'Partenaire',
-  'Paiement',
-  'Client'
+  'Date paiement',
+  'Montant',
+  'Type paiement'
 ];
 ---
 
 <CRUDView
-    apiUrl="/api/forfaits"
+    apiUrl="/api/forfait"
     fields={fields}
     title="Gestion des Forfaits"
     idField="id_forfait"

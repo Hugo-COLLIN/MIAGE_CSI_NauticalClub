@@ -86,7 +86,7 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'id_materiel'
     ]
   },
-  forfaits: {
+  forfait: {
     tableName: 'Forfait',
     idColumn: 'id_forfait',
     requiredFields: [
@@ -95,7 +95,6 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'date_achat',
       'date_expiration',
       'seances_restantes',
-      'id_paiement',
       'id_client'
     ],
     allowedFields: [
@@ -105,9 +104,20 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'date_expiration',
       'seances_restantes',
       'id_partenaire',
-      'id_paiement',
       'id_client'
-    ]
+    ],
+    joinedInsert: {
+      table: 'Paiement',
+      fields: ['date_paiement', 'montant', 'type_paiement'],
+      returnField: 'id_paiement',
+      targetField: 'id_paiement'
+    },
+    joinedSelect: {
+      table: 'Paiement',
+      fields: ['date_paiement', 'montant', 'type_paiement'],
+      joinField: 'id_paiement'
+    }
   }
+
   // Add more tables here
 };
