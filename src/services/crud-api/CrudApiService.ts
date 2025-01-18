@@ -9,16 +9,15 @@ export class CrudApiService {
     this.config = config;
   }
 
-  private buildInsertQuery(data: DatabaseRecord) {
+  private buildInsertQuery(data: DatabaseRecord, tableName: string = this.config.tableName) {
     const fields = Object.keys(data);
     const values = Object.values(data);
     const placeholders = fields.map((_, index) => `$${index + 1}`);
 
     return {
       text: `
-        INSERT INTO ${this.config.tableName} (${fields.join(', ')})
+        INSERT INTO ${tableName} (${fields.join(', ')})
         VALUES (${placeholders.join(', ')})
-        RETURNING *
       `,
       values
     };
@@ -62,7 +61,23 @@ export class CrudApiService {
 
   async create(data: DatabaseRecord) {
     validateRequiredFields(data, this.config.requiredFields);
-    const sanitizedData = sanitizeData(data, this.config.allowedFields);
+    let sanitizedData = sanitizeData(data, this.config.allowedFields);
+
+    if (this.config.joinedInsert) {
+      const { table, fields, returnField, targetField } = this.config.joinedInsert;
+
+      const joinData: DatabaseRecord = {};
+      fields.forEach(field => {
+        joinData[field] = sanitizedData[field];
+        delete sanitizedData[field];
+      });
+
+      const joinQuery = this.buildInsertQuery(joinData, table);
+      const joinResult = await db.query(joinQuery.text + ` RETURNING ${returnField}`, joinQuery.values);
+
+      sanitizedData[targetField] = joinResult.rows[0][returnField];
+    }
+
     const { text, values } = this.buildInsertQuery(sanitizedData);
     const result = await db.query(text, values);
     return result.rows[0];

@@ -8,4 +8,10 @@ export interface TableConfig {
   idColumn: string;
   requiredFields: string[];
   allowedFields: string[];
+  joinedInsert?: {
+    table: string;
+    fields: string[];
+    returnField: string;
+    targetField: string;
+  };
 }
