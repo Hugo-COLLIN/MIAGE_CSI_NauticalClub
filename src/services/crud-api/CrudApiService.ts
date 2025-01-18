@@ -42,7 +42,7 @@ export class CrudApiService {
   }
 
   async getAll(orderBy?: string) {
-    let query = `SELECT a.*, ${this.getJoinedSelectFields()} FROM ${this.config.tableName} a`;
+    let query = `SELECT a.* ${this.getJoinedSelectFields()} FROM ${this.config.tableName} a`;
 
     if (this.config.joinedSelect) {
       const { table, joinField } = this.config.joinedSelect;
@@ -124,6 +124,6 @@ export class CrudApiService {
 
   private getJoinedSelectFields(): string {
     if (!this.config.joinedSelect) return '';
-    return this.config.joinedSelect.fields.map(field => `b.${field}`).join(', ');
+    return ', ' + this.config.joinedSelect.fields.map(field => `b.${field}`).join(', ');
   }
 }
