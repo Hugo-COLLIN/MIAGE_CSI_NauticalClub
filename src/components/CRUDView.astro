@@ -98,14 +98,19 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
 
         dynamicOptionsData[select.id] = data;
 
-        // Réinitialiser le select
         select.innerHTML = '<option value="">Sélectionnez...</option>';
 
-        // Ajouter les nouvelles options
         data.forEach(item => {
           if (!item) return;
 
-          const labelValues = dynamicOptions.labelKeys.map(key => item[key]);
+          const labelValues = dynamicOptions.labelKeys.map(key => {
+            if (key.includes('date') && item[key]) {
+              const date = new Date(item[key]);
+              return date.toLocaleDateString();
+            }
+            return item[key];
+          });
+
           if (labelValues.some(val => val === undefined)) return;
 
           const label = labelValues.join(' ');
