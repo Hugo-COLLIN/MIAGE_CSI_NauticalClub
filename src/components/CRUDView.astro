@@ -1,10 +1,11 @@
 ---
-import type { CRUDProps } from '../types/crud-interface';
+import type {CRUDProps} from '../types/crud-interface';
 import '../styles/crud-view.css';
 
-interface Props extends CRUDProps {}
+interface Props extends CRUDProps {
+}
 
-const { apiUrl, fields, title, idField, columns } = Astro.props;
+const {apiUrl, fields, title, idField, columns} = Astro.props;
 ---
 <div class="container">
   <h1>{title}</h1>
@@ -67,132 +68,132 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
   </div>
 </div>
 
-<script define:vars={{ apiUrl, fields, idField }}>
+<script define:vars={{apiUrl, fields, idField}}>
   let items = [];
-  let dynamicOptionsData = {};
-  const dataForm = document.getElementById('dataForm');
-  const dataTableBody = document.getElementById('dataTableBody');
+    let dynamicOptionsData = {};
+    const dataForm = document.getElementById('dataForm');
+    const dataTableBody = document.getElementById('dataTableBody');
 
-  async function loadDynamicOptions() {
-    const dynamicSelects = document.querySelectorAll('select[data-dynamic]');
+    async function loadDynamicOptions() {
+      const dynamicSelects = document.querySelectorAll('select[data-dynamic]');
 
-    for (const select of dynamicSelects) {
-      try {
-        const dynamicOptionsStr = select.dataset.dynamic;
-        if (!dynamicOptionsStr || dynamicOptionsStr === '') continue;
+      for (const select of dynamicSelects) {
+        try {
+          const dynamicOptionsStr = select.dataset.dynamic;
+          if (!dynamicOptionsStr || dynamicOptionsStr === '') continue;
 
-        const dynamicOptions = JSON.parse(dynamicOptionsStr);
-        if (!dynamicOptions || !dynamicOptions.url) continue;
+          const dynamicOptions = JSON.parse(dynamicOptionsStr);
+          if (!dynamicOptions || !dynamicOptions.url) continue;
 
-        const response = await fetch(dynamicOptions.url);
-        if (!response.ok) {
-          console.error(`Erreur HTTP: ${response.status}`);
-          continue;
-        }
+          const response = await fetch(dynamicOptions.url);
+          if (!response.ok) {
+            console.error(`Erreur HTTP: ${response.status}`);
+            continue;
+          }
 
-        const data = await response.json();
-        if (!Array.isArray(data)) {
-          console.error('Les données reçues ne sont pas un tableau');
-          continue;
-        }
+          const data = await response.json();
+          if (!Array.isArray(data)) {
+            console.error('Les données reçues ne sont pas un tableau');
+            continue;
+          }
 
-        dynamicOptionsData[select.id] = data;
+          dynamicOptionsData[select.id] = data;
 
-        select.innerHTML = '<option value="">Sélectionnez...</option>';
+          select.innerHTML = '<option value="">Sélectionnez...</option>';
 
-        data.forEach(item => {
-          if (!item) return;
+          data.forEach(item => {
+            if (!item) return;
 
-          const labelValues = dynamicOptions.labelKeys.map(key => {
-            if (key.includes('date') && item[key]) {
-              const date = new Date(item[key]);
-              return date.toLocaleDateString();
-            }
-            return item[key];
-          });
-
-          if (labelValues.some(val => val === undefined)) return;
-
-          const label = labelValues.join(' ');
-          const value = item[dynamicOptions.valueKey];
-
-          if (value === undefined) return;
-
-          const option = document.createElement('option');
-          option.value = value;
-          option.textContent = label;
-          select.appendChild(option);
-        });
-      } catch (error) {
-        console.error('Erreur lors du chargement des options dynamiques:', error);
-      }
-    }
-  }
-
-  async function loadItems() {
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      items = data;
-      await loadDynamicOptions();
-      renderTable();
-    } catch (error) {
-      console.error('Erreur lors du chargement:', error);
-    }
-  }
-
-  function getDisplayValue(field, value) {
-    if (!value) return '-';
-
-    if (field.type === 'select') {
-      if (field.dynamicOptions) {
-        const data = dynamicOptionsData[field.name];
-        if (data) {
-          // Convertir value en nombre si c'est une chaîne numérique
-          const searchValue = typeof value === 'string' && !isNaN(value) ? parseInt(value) : value;
-
-          const item = data.find(i => i[field.dynamicOptions.valueKey] === searchValue);
-          if (item) {
-            return field.dynamicOptions.labelKeys.map(key => {
-              // Formater la date si c'est une date
+            const labelValues = dynamicOptions.labelKeys.map(key => {
               if (key.includes('date') && item[key]) {
                 const date = new Date(item[key]);
                 return date.toLocaleDateString();
               }
               return item[key];
-            }).join(' ');
-          }
+            });
+
+            if (labelValues.some(val => val === undefined)) return;
+
+            const label = labelValues.join(' ');
+            const value = item[dynamicOptions.valueKey];
+
+            if (value === undefined) return;
+
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = label;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error('Erreur lors du chargement des options dynamiques:', error);
         }
       }
-      const option = field.options?.find(opt => opt.value === value);
-      return option ? option.label : value;
     }
 
-    if (field.type === 'datetime-local') {
-      const date = new Date(value);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${day}/${month}/${year} ${hours}:${minutes}`;
-    } else if (field.type === 'date') {
-      const date = new Date(value);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${day}/${month}/${year}`;
-    }
+    async function loadItems() {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        const data = await response.json();
+        items = data;
+        await loadDynamicOptions();
+        renderTable();
+        } catch (error) {
+        console.error('Erreur lors du chargement:', error);
+        }
+      }
 
-    return value;
-  }
+    function getDisplayValue(field, value) {
+      if (!value) return '-';
+
+      if (field.type === 'select') {
+        if (field.dynamicOptions) {
+          const data = dynamicOptionsData[field.name];
+          if (data) {
+            // Convertir value en nombre si c'est une chaîne numérique
+            const searchValue = typeof value === 'string' && !isNaN(value) ? parseInt(value) : value;
+
+            const item = data.find(i => i[field.dynamicOptions.valueKey] === searchValue);
+            if (item) {
+              return field.dynamicOptions.labelKeys.map(key => {
+                // Formater la date si c'est une date
+                if (key.includes('date') && item[key]) {
+                  const date = new Date(item[key]);
+                  return date.toLocaleDateString();
+                  }
+                return item[key];
+                }).join(' ');
+              }
+            }
+          }
+        const option = field.options?.find(opt => opt.value === value);
+        return option ? option.label : value;
+        }
+
+      if (field.type === 'datetime-local') {
+        const date = new Date(value);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+        } else if (field.type === 'date') {
+        const date = new Date(value);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${day}/${month}/${year}`;
+        }
+
+      return value;
+      }
 
 
-  function renderTable() {
-    dataTableBody.innerHTML = items.map(item => `
+    function renderTable() {
+      dataTableBody.innerHTML = items.map(item => `
       <tr>
         ${fields.map(field => `<td>${getDisplayValue(field, item[field.name]) || '-'}</td>`).join('')}
         <td>
@@ -202,104 +203,113 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
       </tr>
     `).join('');
 
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', () => editItem(button.dataset.id));
-    });
+      document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', () => editItem(button.dataset.id));
+        });
 
-    document.querySelectorAll('.delete-btn').forEach(button => {
-      button.addEventListener('click', () => deleteItem(button.dataset.id));
-    });
-  }
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', () => deleteItem(button.dataset.id));
+        });
+      }
 
-  function formatDateForInput(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
-  }
+    function formatDateForInput(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+      }
 
-  function editItem(id) {
-    const item = items.find(i => i[idField] === parseInt(id));
-    if (item) {
-      document.getElementById('itemId').value = item[idField];
-      fields.forEach(field => {
-        const element = document.getElementById(field.name);
-        if (element) {
-          if (field.type === 'date') {
-            element.value = formatDateForInput(item[field.name]);
-          } else if (field.type === 'datetime-local') {
-            const date = new Date(item[field.name]);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            element.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-          } else {
-            element.value = item[field.name] || '';
+    function editItem(id) {
+      const item = items.find(i => i[idField] === parseInt(id));
+      if (item) {
+        document.getElementById('itemId').value = item[idField];
+        fields.forEach(field => {
+          const element = document.getElementById(field.name);
+          if (element) {
+            if (field.type === 'date') {
+              element.value = formatDateForInput(item[field.name]);
+              } else if (field.type === 'datetime-local') {
+              const date = new Date(item[field.name]);
+              const year = date.getFullYear();
+              const month = String(date.getMonth() + 1).padStart(2, '0');
+              const day = String(date.getDate()).padStart(2, '0');
+              const hours = String(date.getHours()).padStart(2, '0');
+              const minutes = String(date.getMinutes()).padStart(2, '0');
+              element.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+              } else {
+              element.value = item[field.name] || '';
+              }
+            }
+          });
+        }
+      }
+
+
+    async function deleteItem(id) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+        try {
+          const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE'
+            });
+          if (response.ok) {
+            await loadItems();
+            } else {
+            alert('Erreur lors de la suppression');
+            }
+          } catch (error) {
+          console.error('Erreur:', error);
           }
         }
-      });
-    }
-  }
+      }
 
+    dataForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      document.getElementById('formError').textContent = '';
 
-  async function deleteItem(id) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
-      try {
-        const response = await fetch(`${apiUrl}/${id}`, {
-          method: 'DELETE'
+      const formData = {};
+      fields.forEach(field => {
+        let value = document.getElementById(field.name).value;
+
+        // Ajuster la date pour compenser le décalage UTC de PostgreSQL
+        if (field.type === 'date' && value) {
+          const date = new Date(value);
+          // Ajouter un jour pour compenser le décalage UTC
+          date.setDate(date.getDate() + 1);
+          value = date.toISOString().split('T')[0];
+          }
+
+        formData[field.name] = value || null;
         });
+
+      const itemId = document.getElementById('itemId').value;
+      const method = itemId ? 'PUT' : 'POST';
+      const url = itemId ? `${apiUrl}/${itemId}` : apiUrl;
+
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            },
+          body: JSON.stringify(formData),
+          });
+
         if (response.ok) {
+          document.getElementById('formSuccess').textContent = 'Enregistré avec succès';
+          dataForm.reset();
+          document.getElementById('itemId').value = '';
           await loadItems();
-        } else {
-          alert('Erreur lors de la suppression');
-        }
-      } catch (error) {
+          setTimeout(() => {
+            document.getElementById('formSuccess').textContent = '';
+            }, 3000);
+          } else {
+          const error = await response.json();
+          document.getElementById('formError').textContent = error.error || 'Erreur lors de l\'enregistrement';
+          }
+        } catch (error) {
         console.error('Erreur:', error);
-      }
-    }
-  }
-
-  dataForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    document.getElementById('formError').textContent = '';
-
-    const formData = {};
-    fields.forEach(field => {
-      const value = document.getElementById(field.name).value;
-      formData[field.name] = value || null;
-    });
-
-    const itemId = document.getElementById('itemId').value;
-    const method = itemId ? 'PUT' : 'POST';
-    const url = itemId ? `${apiUrl}/${itemId}` : apiUrl;
-
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        document.getElementById('formError').textContent = 'Erreur de connexion au serveur';
+        }
       });
 
-      if (response.ok) {
-        document.getElementById('formSuccess').textContent = 'Enregistré avec succès';
-        dataForm.reset();
-        document.getElementById('itemId').value = '';
-        await loadItems();
-        setTimeout(() => {
-          document.getElementById('formSuccess').textContent = '';
-        }, 3000);
-      } else {
-        const error = await response.json();
-        document.getElementById('formError').textContent = error.error || 'Erreur lors de l\'enregistrement';
-      }
-    } catch (error) {
-      console.error('Erreur:', error);
-      document.getElementById('formError').textContent = 'Erreur de connexion au serveur';
-    }
-  });
-
-  loadItems();
+    loadItems();
 </script>
