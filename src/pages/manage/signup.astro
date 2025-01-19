@@ -1,4 +1,5 @@
 ---
+import NavBar from "../../components/NavBar.astro";
 import {checkAuth} from "../../services/auth/page-auth";
 
 const user = await checkAuth(Astro);
@@ -49,6 +50,7 @@ if (!user) return Astro.redirect('/login', 302);
   </style>
 </head>
 <body>
+<NavBar user={user} />
 <div class="signup-form">
   <h2>Création de compte</h2>
   <form id="signupForm">
