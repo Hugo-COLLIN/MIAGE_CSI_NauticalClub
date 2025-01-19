@@ -186,5 +186,11 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
     requiredFields: ['date_debut', 'date_fin'],
     allowedFields: ['date_debut', 'date_fin']
   },
+  partenaires: {
+    tableName: 'Partenaire',
+    idColumn: 'id_partenaire',
+    requiredFields: ['nom', 'type_partenaire'],
+    allowedFields: ['nom', 'type_partenaire', 'adresse', 'telephone', 'email']
+  },
   // Add more tables here
 };

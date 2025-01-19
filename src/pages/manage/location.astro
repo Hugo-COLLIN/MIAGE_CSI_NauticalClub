@@ -44,26 +44,46 @@ const fields = [
   {
     name: 'id_client',
     label: 'Client',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/clients',
+      labelKeys: ['nom', 'prenom'],
+      valueKey: 'id_client'
+    }
   },
   {
     name: 'id_personnel',
     label: 'Personnel',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/personnel',
+      labelKeys: ['nom', 'prenom'],
+      valueKey: 'id_personnel'
+    }
   },
   {
     name: 'id_saison',
     label: 'Saison',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/saison',
+      labelKeys: ['date_debut', 'date_fin'],
+      valueKey: 'id_saison'
+    }
   },
   {
     name: 'id_materiel',
     label: 'Matériel',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/materiel',
+      labelKeys: ['type_materiel', 'caracteristiques'],
+      valueKey: 'id_materiel'
+    }
   }
 ];
 

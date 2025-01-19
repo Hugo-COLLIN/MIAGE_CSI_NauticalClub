@@ -48,37 +48,24 @@ const fields = [
   {
     name: 'id_client',
     label: 'Client',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/clients',
+      labelKeys: ['nom', 'prenom'],
+      valueKey: 'id_client'
+    }
   },
-  // {
-  //   name: 'id_client',
-  //   label: 'Client',
-  //   type: 'select',
-  //   required: true,
-  //   options: [],
-  //   dynamicOptions: {
-  //     url: '/api/clients',
-  //     labelKey: 'nom',
-  //     valueKey: 'id_client'
-  //   }
-  // },
   {
     name: 'id_partenaire',
     label: 'Partenaire',
-    type: 'number'
+    type: 'select',
+    dynamicOptions: {
+      url: '/api/partenaires',
+      labelKeys: ['nom'],
+      valueKey: 'id_partenaire'
+    }
   },
-  // {
-  //   name: 'id_partenaire',
-  //   label: 'Partenaire',
-  //   type: 'select',
-  //   options: [],
-  //   dynamicOptions: {
-  //     url: '/api/partenaires',
-  //     labelKey: 'nom',
-  //     valueKey: 'id_partenaire'
-  //   }
-  // },
   {
     name: 'date_paiement',
     label: 'Date de paiement',
