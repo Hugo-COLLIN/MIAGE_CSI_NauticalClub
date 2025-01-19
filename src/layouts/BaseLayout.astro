@@ -1,5 +1,6 @@
 ---
 import AuthButton from "../components/AuthButton.astro";
+import NavBar from "../components/NavBar.astro";
 
 const { title } = Astro.props;
 ---
@@ -12,7 +13,9 @@ const { title } = Astro.props;
   <title>{title}</title>
 </head>
 <body>
-<AuthButton />
-<slot />
+<NavBar />
+<main>
+  <slot />
+</main>
 </body>
 </html>

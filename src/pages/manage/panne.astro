@@ -1,7 +1,7 @@
 ---
-import CRUDView from '../components/CRUDView.astro';
-import BaseLayout from "../layouts/BaseLayout.astro";
-import {checkAuth} from "../services/auth/page-auth";
+import CRUDView from '../../components/CRUDView.astro';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {checkAuth} from "../../services/auth/page-auth";
 
 const user = await checkAuth(Astro);
 if (!user) return Astro.redirect('/login', 302);

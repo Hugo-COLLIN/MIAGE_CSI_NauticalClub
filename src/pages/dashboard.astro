@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {checkAuth} from "../services/auth/page-auth";
+import '../styles/dashboard.css';
+import {managementPages} from "../data/managementPages";
+
+const user = await checkAuth(Astro);
+if (!user) return Astro.redirect('/login', 302);
+
+---
+
+<BaseLayout title="Dashboard">
+  <div class="dashboard-container">
+    <h1>Tableau de bord</h1>
+    <div class="dashboard-grid">
+      {managementPages.map(page => (
+          <a href={page.link} class="dashboard-card">
+            <div class="card-icon">{page.icon}</div>
+            <h2>{page.title}</h2>
+            <p>{page.description}</p>
+          </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
