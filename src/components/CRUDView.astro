@@ -21,9 +21,10 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
                     id={field.name}
                     name={field.name}
                     required={field.required}
+                    data-dynamic={field.dynamicOptions ? JSON.stringify(field.dynamicOptions) : ''}
                 >
                   <option value="">Sélectionnez...</option>
-                  {field.options?.map(option => (
+                  {!field.dynamicOptions && field.options?.map(option => (
                       <option value={option.value}>{option.label}</option>
                   ))}
                 </select>
@@ -68,14 +69,70 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
 
 <script define:vars={{ apiUrl, fields, idField }}>
   let items = [];
+  let dynamicOptionsData = {};
   const dataForm = document.getElementById('dataForm');
   const dataTableBody = document.getElementById('dataTableBody');
+
+  async function loadDynamicOptions() {
+    const dynamicSelects = document.querySelectorAll('select[data-dynamic]');
+
+    for (const select of dynamicSelects) {
+      try {
+        const dynamicOptionsStr = select.dataset.dynamic;
+        if (!dynamicOptionsStr || dynamicOptionsStr === '') continue;
+
+        const dynamicOptions = JSON.parse(dynamicOptionsStr);
+        if (!dynamicOptions || !dynamicOptions.url) continue;
+
+        const response = await fetch(dynamicOptions.url);
+        if (!response.ok) {
+          console.error(`Erreur HTTP: ${response.status}`);
+          continue;
+        }
+
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+          console.error('Les données reçues ne sont pas un tableau');
+          continue;
+        }
+
+        dynamicOptionsData[select.id] = data;
+
+        // Réinitialiser le select
+        select.innerHTML = '<option value="">Sélectionnez...</option>';
+
+        // Ajouter les nouvelles options
+        data.forEach(item => {
+          if (!item) return;
+
+          const labelValues = dynamicOptions.labelKeys.map(key => item[key]);
+          if (labelValues.some(val => val === undefined)) return;
+
+          const label = labelValues.join(' ');
+          const value = item[dynamicOptions.valueKey];
+
+          if (value === undefined) return;
+
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = label;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Erreur lors du chargement des options dynamiques:', error);
+      }
+    }
+  }
 
   async function loadItems() {
     try {
       const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       items = data;
+      await loadDynamicOptions();
       renderTable();
     } catch (error) {
       console.error('Erreur lors du chargement:', error);
@@ -86,6 +143,16 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
     if (!value) return '-';
 
     if (field.type === 'select') {
+      if (field.dynamicOptions) {
+        const data = dynamicOptionsData[field.name];
+        if (data) {
+          const item = data.find(i => i[field.dynamicOptions.valueKey] === value);
+          if (item) {
+            return field.dynamicOptions.labelKeys.map(key => item[key]).join(' ');
+          }
+        }
+        return value;
+      }
       const option = field.options?.find(opt => opt.value === value);
       return option ? option.label : value;
     }

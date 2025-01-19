@@ -138,6 +138,47 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       'id_materiel',
       'id_saison'
     ]
+  },
+  personnel: {
+    tableName: 'Personnel',
+    idColumn: 'id_personnel',
+    requiredFields: [
+      'nom',
+      'prenom',
+      'email',
+      'telephone',
+      'est_diplome',
+      'permis_bateau',
+      'tarif_horaire',
+      'niveau_experimente',
+      'id_saison',
+      'identifiant',
+      'mot_de_passe'
+    ],
+    allowedFields: [
+      'nom',
+      'prenom',
+      'email',
+      'telephone',
+      'est_diplome',
+      'permis_bateau',
+      'specialite',
+      'date_embauche',
+      'tarif_horaire',
+      'niveau_experimente',
+      'id_saison'
+    ],
+    joinedInsert: {
+      table: 'Compte',
+      fields: ['identifiant', 'mot_de_passe'],
+      returnField: 'id_personnel',
+      targetField: 'id_personnel'
+    },
+    joinedSelect: {
+      table: 'Compte',
+      fields: ['identifiant'],
+      joinField: 'id_personnel'
+    }
   }
   // Add more tables here
 };
