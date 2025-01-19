@@ -146,12 +146,21 @@ const { apiUrl, fields, title, idField, columns } = Astro.props;
       if (field.dynamicOptions) {
         const data = dynamicOptionsData[field.name];
         if (data) {
-          const item = data.find(i => i[field.dynamicOptions.valueKey] === value);
+          // Convertir value en nombre si c'est une chaîne numérique
+          const searchValue = typeof value === 'string' && !isNaN(value) ? parseInt(value) : value;
+
+          const item = data.find(i => i[field.dynamicOptions.valueKey] === searchValue);
           if (item) {
-            return field.dynamicOptions.labelKeys.map(key => item[key]).join(' ');
+            return field.dynamicOptions.labelKeys.map(key => {
+              // Formater la date si c'est une date
+              if (key.includes('date') && item[key]) {
+                const date = new Date(item[key]);
+                return date.toLocaleDateString();
+              }
+              return item[key];
+            }).join(' ');
           }
         }
-        return value;
       }
       const option = field.options?.find(opt => opt.value === value);
       return option ? option.label : value;
