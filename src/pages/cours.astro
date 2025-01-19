@@ -1,5 +1,6 @@
 ---
 import CRUDView from '../components/CRUDView.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 const fields = [
   {
@@ -20,9 +21,9 @@ const fields = [
     type: 'select',
     required: true,
     options: [
-      { value: 'debutant', label: 'Débutant' },
-      { value: 'intermediaire', label: 'Intermédiaire' },
-      { value: 'avance', label: 'Avancé' }
+      {value: 'debutant', label: 'Débutant'},
+      {value: 'intermediaire', label: 'Intermédiaire'},
+      {value: 'avance', label: 'Avancé'}
     ]
   },
   {
@@ -39,9 +40,9 @@ const fields = [
     type: 'select',
     required: true,
     options: [
-      { value: 'prevu', label: 'Prévu' },
-      { value: 'confirme', label: 'Confirmé' },
-      { value: 'annule', label: 'Annulé' }
+      {value: 'prevu', label: 'Prévu'},
+      {value: 'confirme', label: 'Confirmé'},
+      {value: 'annule', label: 'Annulé'}
     ]
   },
   {
@@ -84,12 +85,17 @@ const columns = [
   'Forfait',
   'Moniteur'
 ];
----
 
-<CRUDView
-    apiUrl="/api/cours"
-    fields={fields}
-    title="Gestion des Cours"
-    idField="id_cours"
-    columns={columns}
-/>
+const title = "Gestion des Cours";
+---
+<BaseLayout
+    title={title}
+>
+  <CRUDView
+      apiUrl="/api/cours"
+      fields={fields}
+      title={title}
+      idField="id_cours"
+      columns={columns}
+  />
+</BaseLayout>

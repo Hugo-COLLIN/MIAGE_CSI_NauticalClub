@@ -1,5 +1,6 @@
 ---
 import CRUDView from '../components/CRUDView.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 const fields = [
   {
@@ -73,12 +74,18 @@ const columns = [
   'Saison',
   'Matériel'
 ];
+
+const title = "Gestion des Locations";
 ---
 
-<CRUDView
-    apiUrl="/api/locations"
-    fields={fields}
-    title="Gestion des Locations"
-    idField="id_location"
-    columns={columns}
-/>
+<BaseLayout
+    title={title}
+>
+  <CRUDView
+      apiUrl="/api/locations"
+      fields={fields}
+      title={title}
+      idField="id_location"
+      columns={columns}
+  />
+</BaseLayout>
