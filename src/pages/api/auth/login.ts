@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { db } from '../../../db';
+import { db } from '../../../services/db.ts';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

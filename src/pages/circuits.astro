@@ -1,6 +1,6 @@
 ---
-import {db} from '../db';
-import {checkAuth} from "../middleware/page-auth";
+import {db} from '../services/db';
+import {checkAuth} from "../services/auth/page-auth";
 import AuthButton from "../components/AuthButton.astro";
 
 const user = await checkAuth(Astro);

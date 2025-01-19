@@ -1,5 +1,10 @@
 ---
 import CRUDView from '../components/CRUDView.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {checkAuth} from "../services/auth/page-auth";
+
+const user = await checkAuth(Astro);
+if (!user) return Astro.redirect('/login', 302);
 
 const fields = [
   {
@@ -45,12 +50,18 @@ const fields = [
 ];
 
 const columns = ['Nom', 'Prénom', 'Email', 'Téléphone', "Pièce d'identité", 'Camping'];
+
+const title = 'Gestion des Clients';
 ---
 
-<CRUDView
-    apiUrl="/api/clients"
-    fields={fields}
-    title="Gestion des Clients"
-    idField="id_client"
-    columns={columns}
-/>
+<BaseLayout
+    title={title}
+>
+  <CRUDView
+      apiUrl="/api/clients"
+      fields={fields}
+      title={title}
+      idField="id_client"
+      columns={columns}
+  />
+</BaseLayout>

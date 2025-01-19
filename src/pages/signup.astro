@@ -1,4 +1,9 @@
 ---
+import {checkAuth} from "../services/auth/page-auth";
+
+const user = await checkAuth(Astro);
+if (!user) return Astro.redirect('/login', 302);
+
 ---
 <!DOCTYPE html>
 <html lang="fr">

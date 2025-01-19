@@ -1,5 +1,5 @@
 ---
-import { db } from '../db';
+import { db } from '../services/db';
 
 const { rows } = await db.query('SELECT NOW() as "time"');
 ---

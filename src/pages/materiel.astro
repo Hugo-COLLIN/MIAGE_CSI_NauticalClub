@@ -1,5 +1,10 @@
 ---
 import CRUDView from '../components/CRUDView.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {checkAuth} from "../services/auth/page-auth";
+
+const user = await checkAuth(Astro);
+if (!user) return Astro.redirect('/login', 302);
 
 const fields = [
   {
@@ -8,12 +13,12 @@ const fields = [
     type: 'select',
     required: true,
     options: [
-      { value: 'Catamaran', label: 'Catamaran' },
-      { value: 'Pedalo', label: 'Pédalo' },
-      { value: 'Paddle', label: 'Paddle' },
-      { value: 'Planche', label: 'Planche' },
-      { value: 'Voile', label: 'Voile' },
-      { value: 'Pied_mat', label: 'Pied de mât' }
+      {value: 'Catamaran', label: 'Catamaran'},
+      {value: 'Pedalo', label: 'Pédalo'},
+      {value: 'Paddle', label: 'Paddle'},
+      {value: 'Planche', label: 'Planche'},
+      {value: 'Voile', label: 'Voile'},
+      {value: 'Pied_mat', label: 'Pied de mât'}
     ]
   },
   {
@@ -28,10 +33,10 @@ const fields = [
     type: 'select',
     required: true,
     options: [
-      { value: 'Recu', label: 'Reçu' },
-      { value: 'EnService', label: 'En service' },
-      { value: 'EnPanne', label: 'En panne' },
-      { value: 'AuRebut', label: 'Au rebut' }
+      {value: 'Recu', label: 'Reçu'},
+      {value: 'EnService', label: 'En service'},
+      {value: 'EnPanne', label: 'En panne'},
+      {value: 'AuRebut', label: 'Au rebut'}
     ]
   },
   {
@@ -63,12 +68,18 @@ const columns = [
   'N° série',
   'Quantité'
 ];
+
+const title = "Gestion du Matériel";
 ---
 
-<CRUDView
-    apiUrl="/api/materiel"
-    fields={fields}
-    title="Gestion du Matériel"
-    idField="id_materiel"
-    columns={columns}
-/>
+<BaseLayout
+    title={title}
+>
+  <CRUDView
+      apiUrl="/api/materiel"
+      fields={fields}
+      title={title}
+      idField="id_materiel"
+      columns={columns}
+  />
+</BaseLayout>
