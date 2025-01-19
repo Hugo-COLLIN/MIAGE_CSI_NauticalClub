@@ -179,6 +179,12 @@ export const TABLES_CONFIG: Record<string, TableConfig> = {
       fields: ['identifiant'],
       joinField: 'id_personnel'
     }
-  }
+  },
+  saison: {
+    tableName: 'Saison',
+    idColumn: 'id_saison',
+    requiredFields: ['date_debut', 'date_fin'],
+    allowedFields: ['date_debut', 'date_fin']
+  },
   // Add more tables here
 };
