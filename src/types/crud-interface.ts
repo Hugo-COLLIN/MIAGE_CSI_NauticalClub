@@ -11,6 +11,11 @@ export interface Field {
   max?: number;
   defaultValue?: string;
   step?: number;
+  dynamicOptions?: {
+    url: string;
+    valueKeys: string[];
+    labelKey: string;
+  }
 }
 
 export interface CRUDProps {

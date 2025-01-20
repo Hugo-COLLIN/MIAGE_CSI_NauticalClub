@@ -33,14 +33,24 @@ const fields = [
   {
     name: 'id_materiel',
     label: 'Matériel',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/materiel',
+      labelKeys: ['type_materiel', 'caracteristiques'],
+      valueKey: 'id_materiel'
+    }
   },
   {
     name: 'id_saison',
     label: 'Saison',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/saison',
+      labelKeys: ['date_debut', 'date_fin'],
+      valueKey: 'id_saison'
+    }
   }
   // {
   //   name: 'id_materiel',

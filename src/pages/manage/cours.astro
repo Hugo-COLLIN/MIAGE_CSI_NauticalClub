@@ -26,8 +26,7 @@ const fields = [
     required: true,
     options: [
       {value: 'debutant', label: 'Débutant'},
-      {value: 'intermediaire', label: 'Intermédiaire'},
-      {value: 'avance', label: 'Avancé'}
+      {value: 'confirme', label: 'Confirmé'}
     ]
   },
   {
@@ -61,20 +60,35 @@ const fields = [
   {
     name: 'id_saison',
     label: 'Saison',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/saison',
+      labelKeys: ['date_debut', 'date_fin'],
+      valueKey: 'id_saison'
+    }
   },
   {
     name: 'id_forfait',
     label: 'Forfait',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/forfait',
+      labelKeys: ['type_forfait', 'date_achat'],
+      valueKey: 'id_forfait'
+    }
   },
   {
     name: 'id_personnel',
     label: 'Moniteur',
-    type: 'number',
-    required: true
+    type: 'select',
+    required: true,
+    dynamicOptions: {
+      url: '/api/personnel',
+      labelKeys: ['nom', 'prenom'],
+      valueKey: 'id_personnel'
+    }
   }
 ];
 
