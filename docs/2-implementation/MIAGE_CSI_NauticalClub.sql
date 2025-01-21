@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 -- Database: MIAGE_CSI_NauticalClub
 
 -- DROP DATABASE IF EXISTS "MIAGE_CSI_NauticalClub";
@@ -357,3 +359,49 @@ CREATE INDEX idx_forfait_dates ON Forfait(date_achat, date_expiration);
 
 -- script adding extensions
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Création des rôles
+CREATE ROLE administrateur_systeme_AM_CM_MM_HC WITH LOGIN PASSWORD 'administrateur' SUPERUSER;
+CREATE ROLE proprietaire_AM_CM_MM_HC WITH LOGIN PASSWORD 'proprietaire';
+CREATE ROLE moniteur_AM_CM_MM_HC WITH LOGIN PASSWORD 'moniteur';
+CREATE ROLE garcondeplage_AM_CM_MM_HC WITH LOGIN PASSWORD 'garcondeplage';
+
+-- Attribution des permissions
+
+-- Permissions pour l'administrateur système (accès complet à tout)
+GRANT CREATE, CONNECT, TEMPORARY ON DATABASE "MIAGE_CSI_NauticalClub" TO administrateur_systeme_AM_CM_MM_HC;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO administrateur_systeme_AM_CM_MM_HC;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO administrateur_systeme_AM_CM_MM_HC;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO administrateur_systeme_AM_CM_MM_HC;
+
+-- Permissions pour le propriétaire (lecture/écriture complet)
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO proprietaire_AM_CM_MM_HC;
+
+-- Permissions pour le moniteur
+GRANT SELECT, INSERT, UPDATE ON TABLE Cours TO moniteur_AM_CM_MM_HC;
+GRANT SELECT, INSERT, UPDATE ON TABLE Client TO moniteur_AM_CM_MM_HC;
+GRANT SELECT, INSERT, UPDATE ON TABLE Location TO moniteur_AM_CM_MM_HC;
+GRANT SELECT, INSERT, UPDATE ON TABLE Forfait TO moniteur_AM_CM_MM_HC;
+GRANT SELECT ON TABLE Materiel TO moniteur_AM_CM_MM_HC;
+GRANT UPDATE (etat) ON TABLE Materiel TO moniteur_AM_CM_MM_HC;
+
+-- Permissions pour le garçon de plage
+GRANT SELECT ON TABLE Materiel TO garcondeplage_AM_CM_MM_HC;
+GRANT UPDATE (etat) ON TABLE Materiel TO garcondeplage_AM_CM_MM_HC;
+
+-- Restrictions : Seul l'administrateur peut gérer les comptes
+
+-- Les archives sont réservées aux propriétaires
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO proprietaire_AM_CM_MM_HC;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM moniteur_AM_CM_MM_HC, garcondeplage_AM_CM_MM_HC;
+
+-- Appliquer les droits automatiquement sur les nouvelles tables
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO administrateur_systeme_AM_CM_MM_HC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO proprietaire_AM_CM_MM_HC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE ON TABLES TO moniteur_AM_CM_MM_HC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO garcondeplage_AM_CM_MM_HC;
+
+-- Gestion stricte des rôles et utilisateurs
+-- L'administrateur peut gérer les rôles
+GRANT USAGE, CREATE ON SCHEMA public TO administrateur_systeme_AM_CM_MM_HC;
+REVOKE CREATE ON SCHEMA public FROM proprietaire_AM_CM_MM_HC, moniteur_AM_CM_MM_HC, garcondeplage_AM_CM_MM_HC;
