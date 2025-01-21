@@ -25,6 +25,11 @@
         date_prise_fonction
     }
 
+    class Compte {
+        identifiant
+        mot_de_passe
+    }
+
     class Saison {
         id_saison
         date_debut
@@ -214,5 +219,6 @@
     ArchiveSaison "1" -- "0..*" ArchiveCours: a lieu pendant
     ArchiveSaison "1" -- "0..*" ArchiveLocation: a lieu pendant
     ArchivePaiement "1" -- "1..*" ArchiveForfait: payé pour
+    Personnel "1" --- "1" Compte
 
 @enduml
